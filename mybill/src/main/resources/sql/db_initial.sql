@@ -3,12 +3,13 @@
 create database if not exists mybill;
 use mybill;
 
+
 -- 用户表
 drop table if exists user;
 create table user (
     id bigint primary key auto_increment comment '用户id',
-    username varchar(25) not null unique comment '用户名（唯一）',
-    password varchar(255) not null comment '用户密码（加密存储）',
+    username varchar(25) null unique comment '用户名（唯一）',
+    password varchar(255) null comment '用户密码（加密存储）',
     phone varchar(11) unique null comment '手机号（唯一）',
     nickname varchar(25) null comment '昵称',
     avatar varchar(255) null comment '头像url',
@@ -19,6 +20,7 @@ create table user (
     status tinyint not null default 1 comment '账号状态：1-正常, 0-禁用',
     last_update_time datetime default current_timestamp on update current_timestamp comment '最后更新时间'
 ) engine=InnoDB default charset=utf8mb4 comment='用户表';
+
 
 -- 账本表
 drop table if exists account_book;
@@ -33,6 +35,7 @@ create table account_book (
     last_update_time datetime default current_timestamp on update current_timestamp comment '最后更新时间'
 ) engine=InnoDB default charset=utf8mb4 comment='账本表';
 
+
 -- 账户类型表
 drop table if exists account_type;
 create table account_type (
@@ -46,6 +49,7 @@ create table account_type (
     last_update_time datetime default current_timestamp on update current_timestamp comment '最后更新时间'
 ) engine=InnoDB default charset=utf8mb4 comment='账户类型表';
 
+
 -- 商家类型表
 drop table if exists shop_type;
 create table shop_type (
@@ -57,6 +61,7 @@ create table shop_type (
     create_time datetime default current_timestamp comment '创建时间',
     last_update_time datetime default current_timestamp on update current_timestamp comment '最后更新时间'
 ) engine=InnoDB default charset=utf8mb4 comment='商家类型表';
+
 
 -- 成员类型表
 drop table if exists member_type;
@@ -70,6 +75,7 @@ create table member_type (
     last_update_time datetime default current_timestamp on update current_timestamp comment '最后更新时间'
 ) engine=InnoDB default charset=utf8mb4 comment='成员类型表';
 
+
 -- 项目类型表
 drop table if exists project_type;
 create table project_type (
@@ -81,6 +87,7 @@ create table project_type (
     create_time datetime default current_timestamp comment '创建时间',
     last_update_time datetime default current_timestamp on update current_timestamp comment '最后更新时间'
 ) engine=InnoDB default charset=utf8mb4 comment='项目类型表';
+
 
 -- 账单分类表
 drop table if exists bill_category;
@@ -95,6 +102,7 @@ create table bill_category (
     create_time datetime default current_timestamp comment '创建时间',
     last_update_time datetime default current_timestamp on update current_timestamp comment '最后更新时间'
 ) engine=InnoDB default charset=utf8mb4 comment='账单分类表';
+
 
 -- 账单表
 drop table if exists bill;
@@ -115,6 +123,7 @@ create table bill (
     last_update_time datetime default current_timestamp on update current_timestamp comment '最后更新时间'
 ) engine=InnoDB default charset=utf8mb4 comment='账单表';
 
+
 -- 附件表
 drop table if exists attachment;
 create table attachment (
@@ -126,6 +135,7 @@ create table attachment (
     create_time datetime default current_timestamp comment '创建时间',
     last_update_time datetime default current_timestamp on update current_timestamp comment '最后更新时间'
 ) engine=InnoDB default charset=utf8mb4 comment='附件表';
+
 
 -- 模板表
 drop table if exists template;
