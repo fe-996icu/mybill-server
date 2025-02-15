@@ -1,7 +1,7 @@
 package com.icu.mybill.common;
 
 
-import com.icu.mybill.enums.ResultCodeEnum;
+import com.icu.mybill.enums.ResultCode;
 import lombok.ToString;
 
 /**
@@ -30,7 +30,7 @@ public class Result<T> {
         result.setMsg(message);
         return result;
     }
-    public static <T> Result<T> build(T body, ResultCodeEnum resultCodeEnum) {
+    public static <T> Result<T> build(T body, ResultCode resultCodeEnum) {
         Result<T> result = build(body);
         result.setCode(resultCodeEnum.getCode());
         result.setMsg(resultCodeEnum.getMessage());
@@ -44,7 +44,7 @@ public class Result<T> {
      */
     public static<T> Result<T> ok(T data){
         Result<T> result = build(data);
-        return build(data, ResultCodeEnum.SUCCESS);
+        return build(data, ResultCode.SUCCESS);
     }
     public Result<T> message(String msg){
         this.setMsg(msg);
