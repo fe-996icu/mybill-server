@@ -45,3 +45,13 @@ springdoc:
   swagger-ui:
     enabled: true # 开启swagger界面，依赖OpenApi，需要OpenApi同时开启
     path: /user-service/swagger-ui/index.html # 自定义路径，默认为"/swagger-ui/index.html"
+
+
+# ---------- 下面是自定义配置 ----------
+com:
+  icu:
+    fileStoreDir: D:/files/
+    token:
+      # token 密钥 ： mybill-token-secret
+      secret: bXliaWxsLXRva2VuLXNlY3JldA==
+      expire-time: 60*24*180 # token 过期时间，单位为分钟
