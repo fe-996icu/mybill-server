@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.icu.mybill.mapper.ShopTypeMapper">
+
+    <resultMap id="BaseResultMap" type="com.icu.mybill.pojo.ShopType">
+            <id property="id" column="id" />
+            <result property="name" column="name" />
+            <result property="icon" column="icon" />
+            <result property="sort" column="sort" />
+            <result property="userId" column="user_id" />
+            <result property="createTime" column="create_time" />
+            <result property="lastUpdateTime" column="last_update_time" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,name,icon,sort,user_id,create_time,
+        last_update_time
+    </sql>
+</mapper>

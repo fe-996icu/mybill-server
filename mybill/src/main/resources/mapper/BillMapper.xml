@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.icu.mybill.mapper.BillMapper">
+
+    <resultMap id="BaseResultMap" type="com.icu.mybill.pojo.Bill">
+            <id property="id" column="id" />
+            <result property="accountBookId" column="account_book_id" />
+            <result property="type" column="type" />
+            <result property="billCategoryId" column="bill_category_id" />
+            <result property="accountTypeId" column="account_type_id" />
+            <result property="amount" column="amount" />
+            <result property="memberTypeId" column="member_type_id" />
+            <result property="date" column="date" />
+            <result property="shopTypeId" column="shop_type_id" />
+            <result property="projectTypeId" column="project_type_id" />
+            <result property="userId" column="user_id" />
+            <result property="notes" column="notes" />
+            <result property="createTime" column="create_time" />
+            <result property="lastUpdateTime" column="last_update_time" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,account_book_id,type,bill_category_id,account_type_id,amount,
+        member_type_id,date,shop_type_id,project_type_id,user_id,
+        notes,create_time,last_update_time
+    </sql>
+</mapper>
