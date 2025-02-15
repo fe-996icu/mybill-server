@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <!-- 控制台输出的日志格式 -->
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <!-- 格式化输出：%d 表示日期， %thread：表示线程名， %-5level：表示级别从左显示5个字符宽度，%logger：显示日志记录器名称，%msg：表示日志信息，%n：表示换行 -->
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{50} - %msg%n</pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+    </appender>
+
+    <!-- 日志文件输出 -->
+    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <!-- 日志文件路径，不能写规则，设置 file 后，rollingPolicy 不生效 -->
+        <!-- <file>logs/app.log</file> -->
+
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <!-- 日志文件名称和滚动规则，%i：表示序号 -->
+            <fileNamePattern>D:/logs/app-%d{yyyy-MM-dd}-%i.log</fileNamePattern>
+            <!-- 最多保留的历史日志文件个数 -->
+            <maxHistory>30</maxHistory>
+            <!-- 最大文件大小，超过这个大小会触发滚动到新文件，默认为 10MB -->
+            <maxFileSize>10MB</maxFileSize>
+        </rollingPolicy>
+
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <!-- 格式化输出：%d 表示日期， %thread：表示线程名， %-5level：表示级别从左显示5个字符宽度，%logger：显示日志记录器名称，%msg：表示日志信息，%n：表示换行 -->
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{50} - %msg%n</pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+    </appender>
+
+    <!-- 日志级别和输出配置 -->
+    <root level="info">
+        <appender-ref ref="STDOUT" />
+        <appender-ref ref="FILE" />
+    </root>
+
+    <!-- 单独配置某些包的日志级别 -->
+    <logger name="com.icu" level="all" />
+    <logger name="org.springframework" level="info" />
+</configuration>
