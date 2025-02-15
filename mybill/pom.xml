@@ -97,7 +97,22 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-aop</artifactId>
         </dependency>
-</dependencies>
+
+        <!-- https://mvnrepository.com/artifact/de.mkammerer/argon2-jvm -->
+        <!--
+            Argon2（最新、最安全，适用于高安全需求），字符串加密库，相比 BCrypt、PBKDF2 更安全
+            2015 年密码哈希竞赛获胜者
+            抗 GPU 暴力破解
+            支持内存硬计算
+            比 PBKDF2 和 BCrypt 更安全
+         -->
+        <dependency>
+            <groupId>de.mkammerer</groupId>
+            <artifactId>argon2-jvm</artifactId>
+            <version>2.11</version>
+        </dependency>
+
+    </dependencies>
 
     <build>
         <plugins>
