@@ -6,7 +6,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -24,7 +26,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler
     public Result handleDuplicateKeyException(DuplicateKeyException e) {
-        log.error("全局异常处理器，拦截到异常 [DuplicateKeyException]", e);
+        log.warn("全局异常处理器，拦截到异常 [DuplicateKeyException]", e);
         String message = e.getMessage();
         int i = message.indexOf("Duplicate Entry");
         String errMsg = message.substring(i);
@@ -34,7 +36,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler
     public Result handleRequestMethodNotSupportedException(HttpRequestMethodNotSupportedException e) {
-        log.error("全局异常处理器，拦截到异常 [RequestMethodNotSupportedException]", e);
+        log.warn("全局异常处理器，拦截到异常 [RequestMethodNotSupportedException]", e);
         return Result.build(null, ResultCode.METHOD_NOT_SUPPORTED);
     }
 
@@ -45,7 +47,7 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(TokenInvalidException.class)
     public ResponseEntity<Result> handleTokenInvalidException(TokenInvalidException e) {
-        log.error("全局异常处理器，拦截到异常 [TokenInvalidException]", e);
+        log.warn("全局异常处理器，拦截到异常 [TokenInvalidException]", e);
         // 构造业务结果对象
         Result result = Result.build(null, ResultCode.NOT_PERMISSION);
 
@@ -54,4 +56,30 @@ public class GlobalExceptionHandler {
                 .status(HttpStatus.UNAUTHORIZED)
                 .body(result);
     }
+
+
+    /**
+     * 参数校验异常，缺少参数，或者 参数格式错误
+     * @param e
+     * @return
+     */
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public Result<?> handleValidationException(MethodArgumentNotValidException e) {
+        String errorMessage = e.getBindingResult().getFieldError().getDefaultMessage();
+        log.warn("全局异常处理器，拦截到异常 [MethodArgumentNotValidException]", e);
+        return Result.build(null, ResultCode.PARAMETER_FAIL.getCode(), errorMessage);
+    }
+
+    /**
+     * 参数校验异常，没有传递参数，spring无法解析转换请求参数为DTO
+     * @param e
+     * @return
+     */
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    public Result<?> handleNotReadableBodyException(HttpMessageNotReadableException e) {
+        String errorMessage = e.getLocalizedMessage();
+        log.warn("全局异常处理器，拦截到异常 [HttpMessageNotReadableException]", e);
+        return Result.build(null, ResultCode.PARAMETER_FAIL);
+    }
+
 }

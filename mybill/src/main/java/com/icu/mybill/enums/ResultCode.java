@@ -10,7 +10,7 @@ public enum ResultCode {
     PASSWORD_ERROR(503,"passwordError"),
     NOT_LOGIN(504,"notLogin"),
     USERNAME_USED(505,"userNameUsed"),
-    LOGIN_FAIL(400,"账号或密码错误"),
+    PARAMETER_FAIL(400,"请求参数错误"),
     NOT_FOUND(404,"notFound"),
     METHOD_NOT_SUPPORTED(405,"请求方法不支持"),
     SERVER_ERROR(500,"对不起,服务器异常,请稍后重试"),
