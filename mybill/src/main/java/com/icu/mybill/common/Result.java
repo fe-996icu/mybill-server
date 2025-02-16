@@ -43,9 +43,30 @@ public class Result<T> {
      * @return
      */
     public static<T> Result<T> ok(T data){
-        Result<T> result = build(data);
         return build(data, ResultCode.SUCCESS);
     }
+
+    /**
+     * 操作失败
+     * @param resultCodeEnum
+     * @param <T>
+     * @return
+     */
+    public static<T> Result<T> fail(ResultCode resultCodeEnum){
+        return build(null, resultCodeEnum);
+    }
+
+    /**
+     * 操作失败
+     * @param code
+     * @param message
+     * @param <T>
+     * @return
+     */
+    public static<T> Result<T> fail(Integer code, String message) {
+        return build(null, code, message);
+    }
+
     public Result<T> message(String msg){
         this.setMsg(msg);
         return this;
