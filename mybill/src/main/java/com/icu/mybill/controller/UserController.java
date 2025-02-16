@@ -7,17 +7,15 @@ import com.icu.mybill.dto.user.LoginDTO;
 import com.icu.mybill.pojo.User;
 import com.icu.mybill.service.UserService;
 import com.icu.mybill.util.CommonUtil;
+import com.icu.mybill.util.ThreadLocalHelper;
 import com.icu.mybill.util.TokenHelper;
-import com.icu.mybill.vo.user.LoginVO;
+import com.icu.mybill.vo.user.UserVO;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @Slf4j
 @RestController
@@ -37,7 +35,7 @@ public class UserController {
      * @Validated用于校验参数
      */
     @PostMapping("login")
-    public ResponseEntity<Result<LoginVO>> login(@RequestBody @Validated LoginDTO loginDTO, HttpServletRequest request) {
+    public ResponseEntity<Result<UserVO>> login(@RequestBody @Validated LoginDTO loginDTO, HttpServletRequest request) {
         // 获取用户登录所在ip
         String realIp = CommonUtil.getRealIp(request);
         loginDTO.setLastLoginIp(realIp);
@@ -46,30 +44,29 @@ public class UserController {
 
         User user = userService.login(loginDTO);
 
-        LoginVO loginVO = BeanUtil.copyProperties(user, LoginVO.class);
-
         TokenUserDTO tokenUserDTO = new TokenUserDTO();
         tokenUserDTO.setId(user.getId());
         tokenUserDTO.setUsername(user.getUsername());
+        tokenUserDTO.setLastLoginTime(user.getLastLoginTime());
         String token = tokenHelper.generateToken(tokenUserDTO);
 
-        return ResponseEntity.ok().header("token", token).body(Result.ok(loginVO));
+        UserVO userVO = BeanUtil.copyProperties(user, UserVO.class);
+        // 将token信息存入响应头中，并返回用户vo对象
+        return ResponseEntity.ok().header("token", token).body(Result.ok(userVO));
     }
 
 
     /**
-     * 登录
-     * @Validated用于校验参数
-     * @param loginDTO
+     * 获取用户信息
+     *
      * @return
      */
-    @PostMapping("getUserInfo")
-    public Result<LoginVO> getUserInfo(@RequestBody @Validated LoginDTO loginDTO) {
-        log.info("用户登录：{}", loginDTO);
+    @GetMapping("getUserInfo")
+    public Result<UserVO> getUserInfo() {
+        TokenUserDTO tokenUserDTO = ThreadLocalHelper.get();
+        User user = userService.getById(tokenUserDTO.getId());
 
-        // User user = userService.login(loginDTO);
-
-        LoginVO loginVO = BeanUtil.copyProperties(loginDTO, LoginVO.class);
-        return Result.ok(loginVO);
+        UserVO userVO = BeanUtil.copyProperties(user, UserVO.class);
+        return Result.ok(userVO);
     }
 }

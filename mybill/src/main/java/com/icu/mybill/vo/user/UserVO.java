@@ -5,8 +5,8 @@ import lombok.Data;
 import java.time.LocalDateTime;
 
 @Data
-public class LoginVO {
-    private Integer id;
+public class UserVO {
+    private Long id;
     private String username;
     private String phone;
     private String nickname;
@@ -17,5 +17,4 @@ public class LoginVO {
     private String lastLoginDevice;
     private Integer status;
     private LocalDateTime lastUpdateTime;
-    private String token;
 }
