@@ -4,6 +4,8 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+
+import java.time.LocalDateTime;
 import java.util.Date;
 
 import com.icu.mybill.enums.UserStatus;
@@ -50,12 +52,12 @@ public class User {
     /**
      * 注册时间
      */
-    private Date regTime;
+    private LocalDateTime regTime;
 
     /**
      * 上次登录时间
      */
-    private Date lastLoginTime;
+    private LocalDateTime lastLoginTime;
 
     /**
      * 上次登录ip
@@ -75,5 +77,5 @@ public class User {
     /**
      * 最后更新时间
      */
-    private Date lastUpdateTime;
+    private LocalDateTime lastUpdateTime;
 }
