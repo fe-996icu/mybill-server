@@ -1,5 +1,6 @@
 package com.icu.mybill.service;
 
+import com.icu.mybill.dto.user.LoginDTO;
 import com.icu.mybill.pojo.User;
 import com.baomidou.mybatisplus.extension.service.IService;
 
@@ -10,4 +11,5 @@ import com.baomidou.mybatisplus.extension.service.IService;
 */
 public interface UserService extends IService<User> {
 
+    User login(LoginDTO loginDTO);
 }

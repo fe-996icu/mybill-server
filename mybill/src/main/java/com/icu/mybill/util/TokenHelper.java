@@ -53,7 +53,7 @@ public class TokenHelper {
                 .getPayload(); // 获取 Claims
 
         TokenUserDTO tokenUserDTO = new TokenUserDTO();
-        tokenUserDTO.setId(Integer.parseInt(claims.get("id").toString()));
+        tokenUserDTO.setId(Long.parseLong(claims.get("id").toString()));
         tokenUserDTO.setUsername(claims.get("username").toString());
 
         return tokenUserDTO;

@@ -2,6 +2,7 @@ package com.icu.mybill.exception;
 
 import com.icu.mybill.common.Result;
 import com.icu.mybill.enums.ResultCode;
+import com.icu.mybill.exception.user.LoginException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.http.HttpStatus;
@@ -80,6 +81,17 @@ public class GlobalExceptionHandler {
         String errorMessage = e.getLocalizedMessage();
         log.warn("全局异常处理器，拦截到异常 [HttpMessageNotReadableException]", e);
         return Result.build(null, ResultCode.PARAMETER_FAIL);
+    }
+
+    /**
+     * 登录异常
+     * @param e
+     * @return
+     */
+    @ExceptionHandler(LoginException.class)
+    public Result<?> handleLoginException(LoginException e) {
+        log.warn("全局异常处理器，拦截到异常 [LoginException]", e);
+        return Result.fail(e.getCode(), e.getMessage());
     }
 
 }

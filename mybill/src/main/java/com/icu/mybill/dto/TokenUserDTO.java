@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
  */
 @Data
 public class TokenUserDTO {
-    private Integer id;
+    private Long id;
     private String username;
     private LocalDateTime lastLoginTime;
     private String token;
