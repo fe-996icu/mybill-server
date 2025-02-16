@@ -1,4 +1,4 @@
--- 新建一个用户
+-- 新建一个用户，密码： 123456 加密后的值
 insert into user (id, username, password, phone, nickname, avatar, reg_time, last_login_time, last_login_ip,
                   last_login_device, status, last_update_time)
 values (1, 'zhangsan', '$argon2i$v=19$m=65536,t=3,p=2$hQRvNWz6mrL7+uvrPsSPhg$PdqrcPLfy8nYz6h2fnI+k9NbdPY8t3vLIsteoiZu0sA',
@@ -202,7 +202,7 @@ values
         ('16', '应付款项', null, 1, '15', 1, now(), null);
 
 
--- 为用户1插入一个支出类型的账单记录
+-- 为用户1插入支出、收入类型的账单记录
 insert into bill (id, account_book_id, type, bill_category_id, account_type_id, amount, member_type_id, date,
                   shop_type_id, project_type_id, user_id, notes, create_time, last_update_time)
 values (1, 1, 1, 2, 1, 100.00, 1, '2023-07-01', 1, 1, 1, '测试支出记录', now(), null),
