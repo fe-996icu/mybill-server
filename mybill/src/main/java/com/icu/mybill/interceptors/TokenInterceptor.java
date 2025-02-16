@@ -8,19 +8,41 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
+import org.springframework.web.servlet.HandlerExecutionChain;
 import org.springframework.web.servlet.HandlerInterceptor;
+import org.springframework.web.servlet.HandlerMapping;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
 
 @Slf4j
 @Service // 添加@Service注解，方便依赖注入
 public class TokenInterceptor implements HandlerInterceptor {
     @Autowired
     private TokenHelper tokenHelper;
+
+    @Autowired
+    private ApplicationContext applicationContext;
+
+    public HandlerMapping getHandlerMapping() {
+        return applicationContext.getBean("requestMappingHandlerMapping", RequestMappingHandlerMapping.class);
+    }
+
     @Override
     // 目标资源方法执行前执行，返回true：放行，返回false：不放行
     public boolean preHandle(HttpServletRequest req, HttpServletResponse resp, Object handler) throws Exception {
         log.info("TokenInterceptor拦截器执行-[preHandle]：{}", req.getRequestURI());
+
+        // 检查 URI 是否有对应的 Controller
+        HandlerMapping handlerMapping = getHandlerMapping();
+        HandlerExecutionChain chain = handlerMapping.getHandler(req);
+        if (chain == null) {
+            resp.sendError(HttpServletResponse.SC_NOT_FOUND, "Not Found");
+            return false; // 直接返回 404，不进行 Token 校验
+        }
+
         String token = req.getHeader("token");
         if(token == null || token.isEmpty()){
             log.info("token为空");
