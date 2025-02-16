@@ -54,4 +54,5 @@ com:
     token:
       # token 密钥 ： mybill-token-secret
       secret: bXliaWxsLXRva2VuLXNlY3JldA==
-      expire-time: 60*24*180 # token 过期时间，单位为分钟
+      expire-time: 259200 # token 过期时间，单位为分钟，259200=60*24*180
+
