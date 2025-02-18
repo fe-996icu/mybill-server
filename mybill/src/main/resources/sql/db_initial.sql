@@ -1,5 +1,5 @@
 -- 删除旧数据库并创建新数据库
--- drop database if exists mybill;
+drop database if exists mybill;
 create database if not exists mybill;
 use mybill;
 
@@ -18,7 +18,7 @@ create table user (
     last_login_ip varchar(255) null comment '上次登录ip',
     last_login_device varchar(255) null comment '上次登录设备信息',
     status tinyint not null default 1 comment '账号状态：1-正常, 0-禁用',
-    last_update_time datetime default current_timestamp on update current_timestamp comment '最后更新时间'
+    last_update_time datetime on update current_timestamp comment '最后更新时间'
 ) engine=InnoDB default charset=utf8mb4 comment='用户表';
 
 
@@ -31,8 +31,8 @@ create table account_book (
     type tinyint not null default 1 comment '账本类型：1-默认账本, 2-家庭账本, 3-生意账本',
     sort int not null comment '排序字段',
     user_id bigint not null comment '所属用户id（逻辑外键）',
-    create_time datetime default current_timestamp comment '创建时间',
-    last_update_time datetime default current_timestamp on update current_timestamp comment '最后更新时间'
+    create_time datetime not null default now() comment '创建时间',
+    last_update_time datetime on update current_timestamp comment '最后更新时间'
 ) engine=InnoDB default charset=utf8mb4 comment='账本表';
 
 
@@ -45,8 +45,8 @@ create table account_type (
     sort int not null comment '排序字段',
     parent_id bigint null comment '父账户类型id（逻辑外键）',
     user_id bigint not null comment '所属用户id（逻辑外键）',
-    create_time datetime default current_timestamp comment '创建时间',
-    last_update_time datetime default current_timestamp on update current_timestamp comment '最后更新时间'
+    create_time datetime not null default now() comment '创建时间',
+    last_update_time datetime on update current_timestamp comment '最后更新时间'
 ) engine=InnoDB default charset=utf8mb4 comment='账户类型表';
 
 
@@ -58,8 +58,8 @@ create table shop_type (
     icon varchar(255) null comment '商家类型图标',
     sort int not null comment '排序字段',
     user_id bigint not null comment '所属用户id（逻辑外键）',
-    create_time datetime default current_timestamp comment '创建时间',
-    last_update_time datetime default current_timestamp on update current_timestamp comment '最后更新时间'
+    create_time datetime not null default now() comment '创建时间',
+    last_update_time datetime on update current_timestamp comment '最后更新时间'
 ) engine=InnoDB default charset=utf8mb4 comment='商家类型表';
 
 
@@ -71,8 +71,8 @@ create table member_type (
     icon varchar(255) null comment '成员类型图标',
     sort int not null comment '排序字段',
     user_id bigint not null comment '所属用户id（逻辑外键）',
-    create_time datetime default current_timestamp comment '创建时间',
-    last_update_time datetime default current_timestamp on update current_timestamp comment '最后更新时间'
+    create_time datetime not null default now() comment '创建时间',
+    last_update_time datetime on update current_timestamp comment '最后更新时间'
 ) engine=InnoDB default charset=utf8mb4 comment='成员类型表';
 
 
@@ -84,8 +84,8 @@ create table project_type (
     icon varchar(255) null comment '项目类型图标',
     sort int not null comment '排序字段',
     user_id bigint not null comment '所属用户id（逻辑外键）',
-    create_time datetime default current_timestamp comment '创建时间',
-    last_update_time datetime default current_timestamp on update current_timestamp comment '最后更新时间'
+    create_time datetime not null default now() comment '创建时间',
+    last_update_time datetime on update current_timestamp comment '最后更新时间'
 ) engine=InnoDB default charset=utf8mb4 comment='项目类型表';
 
 
@@ -99,8 +99,8 @@ create table bill_category (
     sort int not null comment '排序字段',
     parent_id bigint null comment '父分类id（逻辑外键）',
     user_id bigint not null comment '所属用户id（逻辑外键）',
-    create_time datetime default current_timestamp comment '创建时间',
-    last_update_time datetime default current_timestamp on update current_timestamp comment '最后更新时间'
+    create_time datetime not null default now() comment '创建时间',
+    last_update_time datetime on update current_timestamp comment '最后更新时间'
 ) engine=InnoDB default charset=utf8mb4 comment='账单分类表';
 
 
@@ -119,8 +119,8 @@ create table bill (
     project_type_id bigint null comment '项目类型id（逻辑外键）',
     user_id bigint not null comment '所属用户id（逻辑外键）',
     notes varchar(1000) null comment '备注',
-    create_time datetime default current_timestamp comment '创建时间',
-    last_update_time datetime default current_timestamp on update current_timestamp comment '最后更新时间'
+    create_time datetime not null default now() comment '创建时间',
+    last_update_time datetime on update current_timestamp comment '最后更新时间'
 ) engine=InnoDB default charset=utf8mb4 comment='账单表';
 
 
@@ -132,8 +132,8 @@ create table attachment (
     sort tinyint null comment '排序',
     user_id bigint not null comment '所属用户id（逻辑外键）',
     bill_id bigint not null comment '账单id（逻辑外键）',
-    create_time datetime default current_timestamp comment '创建时间',
-    last_update_time datetime default current_timestamp on update current_timestamp comment '最后更新时间'
+    create_time datetime not null default now() comment '创建时间',
+    last_update_time datetime on update current_timestamp comment '最后更新时间'
 ) engine=InnoDB default charset=utf8mb4 comment='附件表';
 
 
@@ -152,6 +152,6 @@ create table template (
     user_id bigint not null comment '所属用户id（逻辑外键）',
     account_book_id bigint not null comment '账本id（逻辑外键）',
     notes varchar(1000) null comment '备注',
-    create_time datetime default current_timestamp comment '创建时间',
-    last_update_time datetime default current_timestamp on update current_timestamp comment '最后更新时间'
+    create_time datetime not null default now() comment '创建时间',
+    last_update_time datetime on update current_timestamp comment '最后更新时间'
 ) engine=InnoDB default charset=utf8mb4 comment='模板表';
