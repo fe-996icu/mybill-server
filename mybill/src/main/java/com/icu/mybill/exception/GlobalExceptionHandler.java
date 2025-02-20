@@ -12,6 +12,7 @@ import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 @Slf4j
 // @RestControllerAdvice 表示全局异常处理器，拦截所有 @Controller 抛出的异常
@@ -19,15 +20,25 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
+    /**
+     * 全局异常处理
+     * @param e
+     * @return
+     */
     @ExceptionHandler
     public Result handleException(Exception e) {
-        log.error("全局异常处理器，拦截到异常 [Exception]", e);
+        log.error("全局异常 [Exception]", e);
         return Result.build(null, ResultCode.SERVER_ERROR);
     }
 
+    /**
+     * 唯一索引冲突异常
+     * @param e
+     * @return
+     */
     @ExceptionHandler
     public Result handleDuplicateKeyException(DuplicateKeyException e) {
-        log.warn("全局异常处理器，拦截到异常 [DuplicateKeyException]", e);
+        log.warn("全局异常 [DuplicateKeyException]", e);
         String message = e.getMessage();
         int i = message.indexOf("Duplicate Entry");
         String errMsg = message.substring(i);
@@ -35,9 +46,14 @@ public class GlobalExceptionHandler {
         return Result.build(null, ResultCode.SERVER_ERROR.getCode(), arr[2] + "已存在");
     }
 
+    /**
+     * 请求方法不支持异常
+     * @param e
+     * @return
+     */
     @ExceptionHandler
     public Result handleRequestMethodNotSupportedException(HttpRequestMethodNotSupportedException e) {
-        log.warn("全局异常处理器，拦截到异常 [RequestMethodNotSupportedException]", e);
+        log.warn("全局异常 [RequestMethodNotSupportedException]", e);
         return Result.build(null, ResultCode.METHOD_NOT_SUPPORTED);
     }
 
@@ -48,7 +64,7 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(TokenInvalidException.class)
     public ResponseEntity<Result> handleTokenInvalidException(TokenInvalidException e) {
-        log.warn("全局异常处理器，拦截到异常 [TokenInvalidException]", e);
+        log.warn("全局异常 [TokenInvalidException]", e);
         // 构造业务结果对象
         Result result = Result.build(null, ResultCode.NOT_PERMISSION);
 
@@ -67,7 +83,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public Result<?> handleValidationException(MethodArgumentNotValidException e) {
         String errorMessage = e.getBindingResult().getFieldError().getDefaultMessage();
-        log.warn("全局异常处理器，拦截到异常 [MethodArgumentNotValidException]", e);
+        log.warn("全局异常 [MethodArgumentNotValidException]", e);
         return Result.build(null, ResultCode.PARAMETER_FAIL.getCode(), errorMessage);
     }
 
@@ -79,7 +95,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public Result<?> handleNotReadableBodyException(HttpMessageNotReadableException e) {
         String errorMessage = e.getLocalizedMessage();
-        log.warn("全局异常处理器，拦截到异常 [HttpMessageNotReadableException]", e);
+        log.warn("全局异常 [HttpMessageNotReadableException]", e);
         return Result.build(null, ResultCode.PARAMETER_FAIL);
     }
 
@@ -90,8 +106,21 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(LoginException.class)
     public Result<?> handleLoginException(LoginException e) {
-        log.warn("全局异常处理器，拦截到异常 [LoginException]", e);
+        log.warn("全局异常 [LoginException]", e);
         return Result.fail(e.getCode(), e.getMessage());
+    }
+
+    /**
+     * 资源不存在异常
+     * @param e
+     * @return
+     */
+    @ExceptionHandler(NoResourceFoundException.class)
+    public Result<?> handleLoginException(NoResourceFoundException e) throws NoResourceFoundException {
+        log.warn("全局异 [NoResourceFoundException]", e);
+        // return Result.fail(ResultCode.RESOURCE_NOT_FOUND);
+        // 不做处理，直接抛出异常，让全局异常处理器处理
+        throw e;
     }
 
 }
