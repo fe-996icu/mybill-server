@@ -14,9 +14,9 @@ import java.util.Map;
 
 @Component
 public class TokenHelper {
-    @Value("${com.icu.token.secret}")
+    @Value("${com.icu.mybill.token.secret}")
     private String SECRET;
-    @Value("${com.icu.token.expire-time}")
+    @Value("${com.icu.mybill.token.expire-time}")
     private Long EXPIRE_TIME;
 
     public String generateToken(TokenUserDTO tokenUserDTO) {

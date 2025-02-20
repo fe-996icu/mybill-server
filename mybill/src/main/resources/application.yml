@@ -50,9 +50,11 @@ springdoc:
 # ---------- 下面是自定义配置 ----------
 com:
   icu:
-    fileStoreDir: D:/files/
-    token:
-      # token 密钥 ： “需要一个长度超过256个字符的字符串秘钥” =>6ZyA6KaB5LiA5Liq6ZW/5bqm6LaF6L+HMjU25Liq5a2X56ym55qE5a2X56ym5Liy56eY6ZKl
-      secret: 6ZyA6KaB5LiA5Liq6ZW/5bqm6LaF6L+HMjU25Liq5a2X56ym55qE5a2X56ym5Liy56eY6ZKl
-      expire-time: 259200 # token 过期时间，单位为分钟，259200=60*24*180
-
+    mybill:
+      # 默认手机验证码
+      defaultPhoneCode: 6666
+      fileStoreDir: D:/files/
+      token:
+        # token 密钥 ： “需要一个长度超过256个字符的字符串秘钥” =>6ZyA6KaB5LiA5Liq6ZW/5bqm6LaF6L+HMjU25Liq5a2X56ym55qE5a2X56ym5Liy56eY6ZKl
+        secret: 6ZyA6KaB5LiA5Liq6ZW/5bqm6LaF6L+HMjU25Liq5a2X56ym55qE5a2X56ym5Liy56eY6ZKl
+        expire-time: 259200 # token 过期时间，单位为分钟，259200=60*24*180
