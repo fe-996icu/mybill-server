@@ -1,0 +1,281 @@
+{
+  "account_book": [
+    {
+      "name": "默认账本",
+      "icon": null,
+      "type": 1,
+      "sort": 1
+    }
+  ],
+  "member_type": [
+    { "name": "本人", "icon": null, "sort": 1 },
+    { "name": "老公", "icon": null, "sort": 2 },
+    { "name": "老婆", "icon": null, "sort": 3 },
+    { "name": "子女", "icon": null, "sort": 4 },
+    { "name": "父母", "icon": null, "sort": 5 },
+    { "name": "家庭公用", "icon": null, "sort": 6 }
+  ],
+  "project_type": [
+    { "name": "孩子教育", "icon": null, "sort": 1 },
+    { "name": "出差", "icon": null, "sort": 2 },
+    { "name": "汽车", "icon": null, "sort": 3 },
+    { "name": "购物", "icon": null, "sort": 4 },
+    { "name": "宝宝", "icon": null, "sort": 5 },
+    { "name": "红包", "icon": null, "sort": 6 },
+    { "name": "公益", "icon": null, "sort": 7 },
+    { "name": "旅游", "icon": null, "sort": 8 },
+    { "name": "腐败", "icon": null, "sort": 9 },
+    { "name": "回家过年", "icon": null, "sort": 10 },
+    { "name": "人情", "icon": null, "sort": 11 },
+    { "name": "日常", "icon": null, "sort": 12 },
+    { "name": "朋友聚会", "icon": null, "sort": 13 },
+    { "name": "装修", "icon": null, "sort": 14 },
+    { "name": "医疗", "icon": null, "sort": 15 }
+  ],
+  "shop_type": [
+    { "name": "其他", "icon": null, "sort": 1 },
+    { "name": "药店", "icon": null, "sort": 2 },
+    { "name": "超市", "icon": null, "sort": 3 },
+    { "name": "商场", "icon": null, "sort": 4 },
+    { "name": "公交", "icon": null, "sort": 5 },
+    { "name": "地铁", "icon": null, "sort": 6 },
+    { "name": "医院", "icon": null, "sort": 7 },
+    { "name": "小卖部", "icon": null, "sort": 8 },
+    { "name": "水果店", "icon": null, "sort": 9 },
+    { "name": "4S店", "icon": null, "sort": 10 },
+    { "name": "便利店", "icon": null, "sort": 12 },
+    { "name": "书店", "icon": null, "sort": 13 },
+    { "name": "加油站", "icon": null, "sort": 14 },
+    { "name": "饭馆", "icon": null, "sort": 15 },
+    { "name": "菜市场", "icon": null, "sort": 16 },
+    { "name": "停车场", "icon": null, "sort": 17 },
+    { "name": "家具城", "icon": null, "sort": 18 },
+    { "name": "淘宝", "icon": null, "sort": 19 },
+    { "name": "京东", "icon": null, "sort": 20 }
+  ],
+  "bill_category": {
+    "expense": [
+      {
+        "name": "食品酒水",
+        "type": 1,
+        "icon": null,
+        "sort": 1,
+        "children": [
+          { "name": "早午晚餐", "type": 1, "icon": null, "sort": 1 },
+          { "name": "烟酒茶", "type": 1, "icon": null, "sort": 2 },
+          { "name": "水果", "type": 1, "icon": null, "sort": 3 },
+          { "name": "零食", "type": 1, "icon": null, "sort": 4 },
+          { "name": "饮料", "type": 1, "icon": null, "sort": 5 }
+        ]
+      },
+      {
+        "name": "衣服饰品",
+        "type": 1,
+        "icon": null,
+        "sort": 2,
+        "children": [
+          { "name": "衣服裤子", "type": 1, "icon": null, "sort": 1 },
+          { "name": "鞋帽包包", "type": 1, "icon": null, "sort": 2 },
+          { "name": "化妆饰品", "type": 1, "icon": null, "sort": 3 }
+        ]
+      },
+      {
+        "name": "居家物业",
+        "type": 1,
+        "icon": null,
+        "sort": 3,
+        "children": [
+          { "name": "日常用品", "type": 1, "icon": null, "sort": 1 },
+          { "name": "水电煤气", "type": 1, "icon": null, "sort": 2 },
+          { "name": "房租", "type": 1, "icon": null, "sort": 3 },
+          { "name": "物业管理", "type": 1, "icon": null, "sort": 4 },
+          { "name": "维修保养", "type": 1, "icon": null, "sort": 5 }
+        ]
+      },
+      {
+        "name": "行车交通",
+        "type": 1,
+        "icon": null,
+        "sort": 4,
+        "children": [
+          { "name": "公共交通", "type": 1, "icon": null, "sort": 1 },
+          { "name": "打车租车", "type": 1, "icon": null, "sort": 2 },
+          { "name": "私家车费用", "type": 1, "icon": null, "sort": 3 }
+        ]
+      },
+      {
+        "name": "交流通讯",
+        "type": 1,
+        "icon": null,
+        "sort": 5,
+        "children": [
+          { "name": "座机费", "type": 1, "icon": null, "sort": 1 },
+          { "name": "手机费", "type": 1, "icon": null, "sort": 2 },
+          { "name": "上网费", "type": 1, "icon": null, "sort": 3 },
+          { "name": "邮寄费", "type": 1, "icon": null, "sort": 4 }
+        ]
+      },
+      {
+        "name": "休闲娱乐",
+        "type": 1,
+        "icon": null,
+        "sort": 6,
+        "children": [
+          { "name": "运动健身", "type": 1, "icon": null, "sort": 1 },
+          { "name": "交际聚会", "type": 1, "icon": null, "sort": 2 },
+          { "name": "休闲玩乐", "type": 1, "icon": null, "sort": 3 },
+          { "name": "宠物宝贝", "type": 1, "icon": null, "sort": 4 },
+          { "name": "旅游度假", "type": 1, "icon": null, "sort": 5 }
+        ]
+      },
+      {
+        "name": "学习进修",
+        "type": 1,
+        "icon": null,
+        "sort": 7,
+        "children": [
+          { "name": "数码装备", "type": 1, "icon": null, "sort": 1 },
+          { "name": "书刊杂志", "type": 1, "icon": null, "sort": 2 },
+          { "name": "培训进修", "type": 1, "icon": null, "sort": 3 }
+        ]
+      },
+      {
+        "name": "人情往来",
+        "type": 1,
+        "icon": null,
+        "sort": 8,
+        "children": [
+          { "name": "送礼请客", "type": 1, "icon": null, "sort": 1 },
+          { "name": "孝敬长辈", "type": 1, "icon": null, "sort": 2 },
+          { "name": "还人钱物", "type": 1, "icon": null, "sort": 3 },
+          { "name": "慈善捐助", "type": 1, "icon": null, "sort": 4 }
+        ]
+      },
+      {
+        "name": "医疗保健",
+        "type": 1,
+        "icon": null,
+        "sort": 9,
+        "children": [
+          { "name": "药品费", "type": 1, "icon": null, "sort": 1 },
+          { "name": "报检费", "type": 1, "icon": null, "sort": 2 },
+          { "name": "美容费", "type": 1, "icon": null, "sort": 3 },
+          { "name": "医疗费", "type": 1, "icon": null, "sort": 4 }
+        ]
+      },
+      {
+        "name": "金融保险",
+        "type": 1,
+        "icon": null,
+        "sort": 10,
+        "children": [
+          { "name": "银行手续", "type": 1, "icon": null, "sort": 1 },
+          { "name": "投资亏损", "type": 1, "icon": null, "sort": 2 },
+          { "name": "按揭还款", "type": 1, "icon": null, "sort": 3 },
+          { "name": "消费税收", "type": 1, "icon": null, "sort": 4 },
+          { "name": "利息支出", "type": 1, "icon": null, "sort": 5 },
+          { "name": "赔偿罚款", "type": 1, "icon": null, "sort": 6 }
+        ]
+      },
+      {
+        "name": "其他杂项",
+        "type": 1,
+        "icon": null,
+        "sort": 11,
+        "children": [
+          { "name": "其他支出", "type": 1, "icon": null, "sort": 1 },
+          { "name": "意外丢失", "type": 1, "icon": null, "sort": 2 },
+          { "name": "烂账损失", "type": 1, "icon": null, "sort": 3 }
+        ]
+      }
+    ],
+    "income": [
+      {
+        "name": "职业收入",
+        "type": 2,
+        "icon": null,
+        "sort": 1,
+        "children": [
+          { "name": "工资收入", "type": 2, "icon": null, "sort": 1 },
+          { "name": "利息收入", "type": 2, "icon": null, "sort": 2 },
+          { "name": "加班收入", "type": 2, "icon": null, "sort": 3 },
+          { "name": "奖金收入", "type": 2, "icon": null, "sort": 4 },
+          { "name": "投资收入", "type": 2, "icon": null, "sort": 5 },
+          { "name": "兼职收入", "type": 2, "icon": null, "sort": 6 }
+        ]
+      },
+      {
+        "name": "其他收入",
+        "type": 2,
+        "icon": null,
+        "sort": 2,
+        "children": [
+          { "name": "礼金收入", "type": 2, "icon": null, "sort": 1 },
+          { "name": "中奖收入", "type": 2, "icon": null, "sort": 2 },
+          { "name": "意外来钱", "type": 2, "icon": null, "sort": 3 },
+          { "name": "经营所得", "type": 2, "icon": null, "sort": 4 }
+        ]
+      }
+    ]
+  },
+  "account_type": [
+    {
+      "name": "现金账户",
+      "icon": null,
+      "sort": 1,
+      "children": [
+        { "name": "现金", "icon": null, "sort": 1 }
+      ]
+    },
+    {
+      "name": "储蓄账户",
+      "icon": null,
+      "sort": 2,
+      "children": [
+        { "name": "银行卡", "icon": null, "sort": 1 }
+      ]
+    },
+    {
+      "name": "虚拟账户",
+      "icon": null,
+      "sort": 3,
+      "children": [
+        { "name": "支付宝余额", "icon": null, "sort": 1 },
+        { "name": "微信钱包", "icon": null, "sort": 2 }
+      ]
+    },
+    {
+      "name": "投资账户",
+      "icon": null,
+      "sort": 4,
+      "children": [
+        { "name": "基金账户", "icon": null, "sort": 1 },
+        { "name": "股票账户", "icon": null, "sort": 2 }
+      ]
+    },
+    {
+      "name": "债权账户",
+      "icon": null,
+      "sort": 5,
+      "children": [
+        { "name": "应收款项", "icon": null, "sort": 1 }
+      ]
+    },
+    {
+      "name": "信用账户",
+      "icon": null,
+      "sort": 6,
+      "children": [
+        { "name": "信用卡", "icon": null, "sort": 1 }
+      ]
+    },
+    {
+      "name": "负债账户",
+      "icon": null,
+      "sort": 7,
+      "children": [
+        { "name": "应付款项", "icon": null, "sort": 1 }
+      ]
+    }
+  ]
+}
