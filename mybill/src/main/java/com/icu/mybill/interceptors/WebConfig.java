@@ -14,6 +14,7 @@ public class WebConfig implements WebMvcConfigurer {
         registry.addInterceptor(tokenInterceptor)
                 .addPathPatterns("/**") // 拦截所有请求
                 .excludePathPatterns(
+                        "/public/**", // 放行登录接口
                         "/user/login", // 放行登录接口
                         "/user/logout", // 放行登出接口
                         "/error" // token校验前进行404检查，404跳转到此url，在 TokenInterceptor.java 中定义
