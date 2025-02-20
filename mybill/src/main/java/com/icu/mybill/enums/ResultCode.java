@@ -9,7 +9,7 @@ public enum ResultCode {
     PARAMETER_FAIL(400,"请求参数错误"),
     NOT_PERMISSION(401,"无权限访问"),
     NOT_AUTHORIZED(403,"访问受限"),
-    NOT_FOUND(404,"notFound"),
+    RESOURCE_NOT_FOUND(404,"资源未找到"),
     METHOD_NOT_SUPPORTED(405,"请求方法不支持"),
     SERVER_ERROR(500,"对不起,服务器异常,请稍后重试"),
     USERNAME_ERROR(501,"usernameError"),
@@ -20,6 +20,10 @@ public enum ResultCode {
     USERNAME_OR_PASSWORD_ERROR(1001,"用户名或密码错误"),
     USER_NOT_EXIST(1002,"用户不存在"),
     USER_NOT_AVAILABLE(1003,"用户状态不可用"),
+    USERNAME_EXIST(1004,"用户名已存在"),
+    PHONE_EXIST(1005,"手机号已存在"),
+    PHONE_NOT_EXIST(1006,"手机号不存在"),
+    PHONE_CODE_ERROR(1007,"验证码错误"),
     ;
 
     private Integer code;
