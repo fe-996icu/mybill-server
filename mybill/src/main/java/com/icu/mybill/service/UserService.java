@@ -1,6 +1,9 @@
 package com.icu.mybill.service;
 
-import com.icu.mybill.dto.user.LoginDTO;
+import com.icu.mybill.dto.user.LoginByPhoneDTO;
+import com.icu.mybill.dto.user.LoginByUsernameDTO;
+import com.icu.mybill.dto.user.RegisterUserByPhoneDTO;
+import com.icu.mybill.dto.user.RegisterUserByUsernameDTO;
 import com.icu.mybill.pojo.User;
 import com.baomidou.mybatisplus.extension.service.IService;
 
@@ -11,5 +14,11 @@ import com.baomidou.mybatisplus.extension.service.IService;
 */
 public interface UserService extends IService<User> {
 
-    User login(LoginDTO loginDTO);
+    User login(LoginByUsernameDTO loginByUsernameDTO);
+
+    User registerByUsername(RegisterUserByUsernameDTO registerUserDTO);
+
+    User registerByPhone(RegisterUserByPhoneDTO registerUserDTO);
+
+    User loginByPhone(LoginByPhoneDTO loginByPhoneDTO);
 }
