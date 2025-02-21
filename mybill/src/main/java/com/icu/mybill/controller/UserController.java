@@ -3,11 +3,11 @@ package com.icu.mybill.controller;
 import cn.hutool.core.bean.BeanUtil;
 import com.icu.mybill.common.Result;
 import com.icu.mybill.dto.TokenUserDTO;
+import com.icu.mybill.dto.user.UpdateUserDTO;
 import com.icu.mybill.enums.UserStatus;
 import com.icu.mybill.pojo.User;
 import com.icu.mybill.service.UserService;
 import com.icu.mybill.util.ThreadLocalHelper;
-import com.icu.mybill.util.TokenHelper;
 import com.icu.mybill.vo.user.UserVO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,15 +42,12 @@ public class UserController {
      * @return
      */
     @PostMapping("update")
-    public Result<UserVO> update(UserVO userVO) {
-        TokenUserDTO tokenUserDTO = ThreadLocalHelper.get();
-        User user = userService.getById(tokenUserDTO.getId());
+    public Result<?> update(@RequestBody UpdateUserDTO updateUserDTO) {
+        User user = BeanUtil.copyProperties(updateUserDTO, User.class);
+        user.setId(ThreadLocalHelper.get().getId());
 
-        user.setNickname(userVO.getNickname());
-        user.setAvatar(userVO.getAvatar());
-        userService.updateById(user);
-
-        return Result.ok(userVO);
+        boolean result = userService.updateById(user);
+        return Result.ok(result);
     }
 
     /**
