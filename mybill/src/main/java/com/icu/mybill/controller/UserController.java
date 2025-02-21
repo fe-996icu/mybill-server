@@ -3,6 +3,7 @@ package com.icu.mybill.controller;
 import cn.hutool.core.bean.BeanUtil;
 import com.icu.mybill.common.Result;
 import com.icu.mybill.dto.TokenUserDTO;
+import com.icu.mybill.enums.UserStatus;
 import com.icu.mybill.pojo.User;
 import com.icu.mybill.service.UserService;
 import com.icu.mybill.util.ThreadLocalHelper;
@@ -10,9 +11,7 @@ import com.icu.mybill.util.TokenHelper;
 import com.icu.mybill.vo.user.UserVO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @Slf4j
 @RestController
@@ -21,8 +20,38 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @Autowired
-    private TokenHelper tokenHelper;
+    /**
+     * 冻结用户
+     *
+     * @return
+     */
+    @PostMapping("freeze")
+    public Result<UserVO> freeze() {
+        TokenUserDTO tokenUserDTO = ThreadLocalHelper.get();
+        User user = userService.getById(tokenUserDTO.getId());
+
+        user.setStatus(UserStatus.LOCKED);
+        userService.updateById(user);
+
+        return Result.ok(null);
+    }
+
+    /**
+     * 更新用户信息
+     *
+     * @return
+     */
+    @PostMapping("update")
+    public Result<UserVO> update(UserVO userVO) {
+        TokenUserDTO tokenUserDTO = ThreadLocalHelper.get();
+        User user = userService.getById(tokenUserDTO.getId());
+
+        user.setNickname(userVO.getNickname());
+        user.setAvatar(userVO.getAvatar());
+        userService.updateById(user);
+
+        return Result.ok(userVO);
+    }
 
     /**
      * 获取用户信息
