@@ -55,7 +55,7 @@ public class TokenInterceptor implements HandlerInterceptor {
             log.info("token有效-[{}]： {}", req.getRequestURI(), tokenUserDTO);
             return true;
         }catch (Exception ex){
-            log.info("token无效");
+            log.info("token无效 [{}]:", token);
             throw new TokenInvalidException("token无效");
         }
     }

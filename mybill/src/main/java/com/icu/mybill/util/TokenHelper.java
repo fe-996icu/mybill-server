@@ -1,6 +1,7 @@
 package com.icu.mybill.util;
 
 import com.icu.mybill.dto.TokenUserDTO;
+import com.icu.mybill.enums.LoginType;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
@@ -8,6 +9,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -27,6 +29,9 @@ public class TokenHelper {
         Map<String, Object> claims = new HashMap<>();
         claims.put("id", tokenUserDTO.getId());
         claims.put("username", tokenUserDTO.getUsername());
+        claims.put("phone", tokenUserDTO.getPhone());
+        claims.put("loginType", tokenUserDTO.getLoginType().getValue());
+        claims.put("lastLoginTime", tokenUserDTO.getLastLoginTime().toString());
 
         // 3. 设置过期时间
         Date expiration = new Date(System.currentTimeMillis() + 1000 * 60 * EXPIRE_TIME); // 设置过期时间
@@ -54,7 +59,12 @@ public class TokenHelper {
 
         TokenUserDTO tokenUserDTO = new TokenUserDTO();
         tokenUserDTO.setId(Long.parseLong(claims.get("id").toString()));
-        tokenUserDTO.setUsername(claims.get("username").toString());
+        if (claims.get("username") != null)
+            tokenUserDTO.setUsername(claims.get("username").toString());
+        if (claims.get("phone") != null)
+            tokenUserDTO.setPhone(claims.get("phone").toString());
+        tokenUserDTO.setLoginType(LoginType.fromValue(Integer.parseInt(claims.get("loginType").toString())));
+        tokenUserDTO.setLastLoginTime(LocalDateTime.parse(claims.get("lastLoginTime").toString()));
 
         return tokenUserDTO;
     }

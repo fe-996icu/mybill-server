@@ -7,6 +7,7 @@ import com.icu.mybill.dto.user.LoginByPhoneDTO;
 import com.icu.mybill.dto.user.LoginByUsernameDTO;
 import com.icu.mybill.dto.user.RegisterUserByPhoneDTO;
 import com.icu.mybill.dto.user.RegisterUserByUsernameDTO;
+import com.icu.mybill.enums.LoginType;
 import com.icu.mybill.enums.ResultCode;
 import com.icu.mybill.pojo.User;
 import com.icu.mybill.service.UserService;
@@ -93,16 +94,7 @@ public class PublicController {
         log.info("用户登录 /login/username：{}", loginByUsernameDTO);
 
         User user = userService.login(loginByUsernameDTO);
-
-        TokenUserDTO tokenUserDTO = new TokenUserDTO();
-        tokenUserDTO.setId(user.getId());
-        tokenUserDTO.setUsername(user.getUsername());
-        tokenUserDTO.setLastLoginTime(user.getLastLoginTime());
-        String token = tokenHelper.generateToken(tokenUserDTO);
-
-        UserVO userVO = BeanUtil.copyProperties(user, UserVO.class);
-        // 将token信息存入响应头中，并返回用户vo对象
-        return ResponseEntity.ok().header("token", token).body(Result.ok(userVO));
+        return this.getLoginResult(user, LoginType.USERNAME);
     }
 
     @PostMapping("login/phone")
@@ -120,10 +112,15 @@ public class PublicController {
         log.info("用户登录 /login/phone：{}", loginByPhoneDTO);
 
         User user = userService.loginByPhone(loginByPhoneDTO);
+        return this.getLoginResult(user, LoginType.PHONE);
+    }
 
+    private ResponseEntity<Result<UserVO>> getLoginResult(User user, LoginType loginType){
         TokenUserDTO tokenUserDTO = new TokenUserDTO();
         tokenUserDTO.setId(user.getId());
         tokenUserDTO.setUsername(user.getUsername());
+        tokenUserDTO.setPhone(user.getPhone());
+        tokenUserDTO.setLoginType(loginType);
         tokenUserDTO.setLastLoginTime(user.getLastLoginTime());
         String token = tokenHelper.generateToken(tokenUserDTO);
 
@@ -131,5 +128,4 @@ public class PublicController {
         // 将token信息存入响应头中，并返回用户vo对象
         return ResponseEntity.ok().header("token", token).body(Result.ok(userVO));
     }
-
 }
