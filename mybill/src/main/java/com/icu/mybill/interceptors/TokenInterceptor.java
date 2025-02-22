@@ -35,7 +35,7 @@ public class TokenInterceptor implements HandlerInterceptor {
     public boolean preHandle(HttpServletRequest req, HttpServletResponse resp, Object handler) throws Exception {
         log.info("TokenInterceptor拦截器执行-[preHandle]：{}", req.getRequestURI());
 
-        // 检查 URI 是否有对应的 Controller
+        // 检查 URI 是否有对应的 Controller（404检查）
         HandlerMapping handlerMapping = getHandlerMapping();
         HandlerExecutionChain chain = handlerMapping.getHandler(req);
         if (chain == null) {

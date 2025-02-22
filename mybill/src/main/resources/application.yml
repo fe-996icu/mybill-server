@@ -41,10 +41,10 @@ knife4j:
 springdoc:
   api-docs:
     enabled: true # 开启OpenApi接口
-    path: /user-service/v3/api-docs  # 自定义路径，默认为 "/v3/api-docs"
+#    path: /api-docs  # 自定义路径，默认为 "/v3/api-docs"
   swagger-ui:
     enabled: true # 开启swagger界面，依赖OpenApi，需要OpenApi同时开启
-    path: /user-service/swagger-ui/index.html # 自定义路径，默认为"/swagger-ui/index.html"
+#    path: /apidocs/swagger-ui/index.html # 自定义路径，默认为"/swagger-ui/index.html"
 
 
 # ---------- 下面是自定义配置 ----------

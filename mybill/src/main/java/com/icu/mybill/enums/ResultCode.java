@@ -1,11 +1,16 @@
 package com.icu.mybill.enums;
 
+import com.fasterxml.jackson.annotation.JsonValue;
+import lombok.Getter;
+
+import java.util.Arrays;
+
 /**
  * 业务状态码
  */
+@Getter
 public enum ResultCode {
-
-    SUCCESS(200,"success"),
+    SUCCESS(200,"ok"),
     PARAMETER_FAIL(400,"请求参数错误"),
     NOT_PERMISSION(401,"无权限访问"),
     NOT_AUTHORIZED(403,"访问受限"),
@@ -26,16 +31,33 @@ public enum ResultCode {
     PHONE_CODE_ERROR(1007,"验证码错误"),
     ;
 
-    private Integer code;
-    private String message;
+    @JsonValue
+    private final Integer code;
+    private final String message;
     private ResultCode(Integer code, String message) {
         this.code = code;
         this.message = message;
     }
-    public Integer getCode() {
-        return code;
-    }
-    public String getMessage() {
-        return message;
+
+    /**
+     * 根据code获取枚举
+     * @param code
+     * @return
+     */
+    public static ResultCode fromCode(Object code) {
+        if (code == null) {
+            return null;
+        }
+
+        try {
+            int intValue = Integer.parseInt(code.toString());
+            return Arrays.stream(ResultCode.values())
+                    .filter(type -> type.code.equals(intValue))
+                    .findFirst()
+                    // .orElse(null); // 或者抛出异常
+                    .orElseThrow(() -> new IllegalArgumentException("无效的值: " + intValue));
+        } catch (NumberFormatException e) {
+            return null;
+        }
     }
 }
