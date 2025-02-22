@@ -14,6 +14,10 @@ import com.icu.mybill.service.UserService;
 import com.icu.mybill.util.CommonUtil;
 import com.icu.mybill.util.TokenHelper;
 import com.icu.mybill.vo.user.UserVO;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +32,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 @RestController
 @RequestMapping("public")
+// @Tag(name = "公共接口", description = "所有和公共相关的接口，不需要鉴权")
 public class PublicController {
     @Autowired
     private UserService userService;
@@ -44,8 +49,11 @@ public class PublicController {
      * @param registerUserDTO
      * @return
      */
+    @Operation(summary = "通过账号注册用户", description = "通过账号注册用户")
     @PostMapping("register/username")
-    Result<UserVO> registerUsername(@RequestBody @Validated RegisterUserByUsernameDTO registerUserDTO) {
+    Result<UserVO> registerUsername(
+            @Parameter(description = "注册用户信息", required = true) @RequestBody @Validated RegisterUserByUsernameDTO registerUserDTO
+    ) {
         // 检查用户名是否存在
         boolean exists = userService.lambdaQuery().eq(User::getUsername, registerUserDTO.getUsername()).exists();
         if(exists){
@@ -63,7 +71,10 @@ public class PublicController {
      * @return
      */
     @PostMapping("register/phone")
-    Result<UserVO> registerPhone(@RequestBody @Validated RegisterUserByPhoneDTO registerUserDTO) {
+    @Operation(summary = "通过手机号注册用户", description = "通过手机号注册用户")
+    Result<UserVO> registerPhone(
+            @Parameter(description = "通过手机号注册用户信息", required = true) @RequestBody @Validated RegisterUserByPhoneDTO registerUserDTO
+    ) {
         // 检查手机号是否存在
         boolean exists = userService.lambdaQuery().eq(User::getPhone, registerUserDTO.getPhone()).exists();
         if(exists){
@@ -86,7 +97,11 @@ public class PublicController {
      * @Validated用于校验参数
      */
     @PostMapping("login/username")
-    public ResponseEntity<Result<UserVO>> loginUsername(@RequestBody @Validated LoginByUsernameDTO loginByUsernameDTO, HttpServletRequest request) {
+    @Operation(summary = "通过账号密码登录", description = "通过账号密码登录")
+    public ResponseEntity<Result<UserVO>> loginUsername(
+            @Parameter(description = "账号密码登录信息", required = true)
+            @RequestBody @Validated LoginByUsernameDTO loginByUsernameDTO, HttpServletRequest request
+    ) {
         // 获取用户登录所在ip
         String realIp = CommonUtil.getRealIp(request);
         loginByUsernameDTO.setLastLoginIp(realIp);
@@ -98,7 +113,10 @@ public class PublicController {
     }
 
     @PostMapping("login/phone")
-    public ResponseEntity<Result<UserVO>> loginPhone(@RequestBody @Validated LoginByPhoneDTO loginByPhoneDTO, HttpServletRequest request) {
+    @Operation(summary = "通过手机号登录", description = "通过手机号登录")
+    public ResponseEntity<Result<UserVO>> loginPhone(
+            @Parameter(description = "手机号登录信息", required = true) @RequestBody @Validated LoginByPhoneDTO loginByPhoneDTO, HttpServletRequest request
+    ) {
         // 检查验证码
         if(!DEFAULT_PHONE_CODE.equals(loginByPhoneDTO.getCode())){
             // 返回错误信息

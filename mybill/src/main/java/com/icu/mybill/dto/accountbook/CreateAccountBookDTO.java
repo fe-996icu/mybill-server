@@ -7,7 +7,7 @@ import jakarta.validation.constraints.Size;
 import lombok.Data;
 
 @Data
-@Schema(name="创建账本DTO", description = "创建账本的DTO")
+@Schema(description = "创建账本的DTO")
 public class CreateAccountBookDTO {
     @NotBlank(message = "账本名称不能为空")
     @Size(max = 25, min = 1, message = "名称长度在1-25之间")

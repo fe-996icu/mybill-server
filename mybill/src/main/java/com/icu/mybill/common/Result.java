@@ -11,13 +11,13 @@ import lombok.ToString;
  *
  */
 // 这里不能指定@Schema注解的 name 属性，否则swagger只会解析到Result.data，data下的数据不会解析生成描述
-@Schema(/* name="Result", */ description = "所有接口只要进入到服务端业务，都会返回这个结果")
+@Schema(/* name="Result", */ description = "统一接口返回包装类")
 @ToString
 @Data
 public class Result<T> {
     @Schema(description = "业务状态码", example = "200")
     private ResultCode code;
-    @Schema(description = "处理结果描述", example = "success")
+    @Schema(description = "处理结果描述", example = "ok")
     private String msg;
     @Schema(description = "返回数据")
     private T data;
