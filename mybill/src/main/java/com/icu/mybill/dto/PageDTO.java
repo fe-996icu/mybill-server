@@ -2,6 +2,7 @@ package com.icu.mybill.dto;
 
 import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 import java.util.List;
@@ -14,12 +15,22 @@ import java.util.stream.Collectors;
  * @param <T>
  */
 @Data
+@Schema(description = "全局分页对象")
 public class PageDTO <T> {
-    // 总页数
+    /**
+     * 总页数
+     */
+    @Schema(description = "总页数")
     private Long pages;
-    // 总条数
+    /**
+     * 总条数
+     */
+    @Schema(description = "总条数")
     private Long total;
-    // 集合
+    /**
+     * 数据集合
+     */
+    @Schema(description = "数据集合")
     private List<T> rows;
 
     /**
