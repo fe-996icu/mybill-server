@@ -1,25 +1,24 @@
 package com.icu.mybill.controller;
 
 import cn.hutool.core.bean.BeanUtil;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.icu.mybill.common.Result;
+import com.icu.mybill.dto.PageDTO;
 import com.icu.mybill.dto.accountbook.CreateAccountBookDTO;
 import com.icu.mybill.pojo.AccountBook;
+import com.icu.mybill.query.BasePageQuery;
 import com.icu.mybill.service.AccountBookService;
 import com.icu.mybill.util.ThreadLocalHelper;
 import com.icu.mybill.vo.accountbook.AccountBookVO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Slf4j
 @RestController
@@ -51,5 +50,41 @@ public class AccountBookController {
         accountBookService.save(accountBook);
 
         return Result.ok(BeanUtil.copyProperties(accountBook, AccountBookVO.class));
+    }
+
+    /**
+     * 获取账本全部列表
+     *
+     * @return
+     */
+    @GetMapping("list")
+    @Operation(summary = "获取账本全部列表", description = "获取账本全部列表")
+    public Result<List<AccountBookVO>> list() {
+        LambdaQueryWrapper<AccountBook> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(AccountBook::getUserId, ThreadLocalHelper.get().getId());
+        queryWrapper.orderByDesc(AccountBook::getSort, AccountBook::getCreateTime);
+
+        List<AccountBook> list = this.accountBookService.list(queryWrapper);
+        List<AccountBookVO> accountBookVOS = BeanUtil.copyToList(list, AccountBookVO.class);
+
+        return Result.ok(accountBookVOS);
+    }
+
+    /**
+     * 分页获取账本列表
+     *
+     * @param basePageQuery
+     * @return
+     */
+    @GetMapping("page")
+    @Operation(summary = "分页获取账本列表", description = "分页获取账本列表")
+    public Result<PageDTO<AccountBookVO>> page(
+            @Parameter(description = "分页查询参数")
+            @ModelAttribute() BasePageQuery basePageQuery
+    ) {
+        Page<AccountBook> page = accountBookService.pageQuery(basePageQuery);
+        PageDTO<AccountBookVO> dto = PageDTO.of(page, AccountBookVO.class);
+
+        return Result.ok(dto);
     }
 }

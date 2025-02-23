@@ -1,7 +1,9 @@
 package com.icu.mybill.service;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.icu.mybill.pojo.AccountBook;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.icu.mybill.query.BasePageQuery;
 
 /**
 * @author zhangjianzhong
@@ -10,4 +12,5 @@ import com.baomidou.mybatisplus.extension.service.IService;
 */
 public interface AccountBookService extends IService<AccountBook> {
 
+    Page<AccountBook> pageQuery(BasePageQuery basePageQuery);
 }
