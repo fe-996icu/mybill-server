@@ -2,6 +2,9 @@ package com.icu.mybill.controller;
 
 import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.baomidou.mybatisplus.extension.conditions.query.QueryChainWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.icu.mybill.common.Result;
 import com.icu.mybill.dto.PageDTO;
@@ -22,7 +25,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @RestController
@@ -126,5 +131,24 @@ public class AccountBookController {
 
         AccountBook accountBook = BeanUtil.copyProperties(updateAccountBookDTO, AccountBook.class);
         return Result.ok(accountBookService.updateById(accountBook));
+    }
+
+    /**
+     * 删除账本
+     *
+     * @param id
+     * @return
+     */
+    @DeleteMapping("delete")
+    @Operation(summary = "删除账本", description = "删除账本")
+    public Result<Boolean> delete(
+            @Parameter(description = "账本id", required = true) @RequestParam Long id
+    ) {
+        boolean result = accountBookService.remove(
+                Wrappers.lambdaQuery(AccountBook.class)
+                        .eq(AccountBook::getId, id)
+                        .eq(AccountBook::getUserId, ThreadLocalHelper.get().getId())
+        );
+        return Result.ok(result);
     }
 }
