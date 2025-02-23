@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.resource.NoResourceFoundException;
@@ -27,7 +28,7 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler
     public Result handleException(Exception e) {
-        log.error("全局异常 [Exception]", e);
+        log.error("[Exception]", e);
         return Result.build(null, ResultCode.SERVER_ERROR);
     }
 
@@ -38,7 +39,7 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler
     public Result handleDuplicateKeyException(DuplicateKeyException e) {
-        log.warn("全局异常 [DuplicateKeyException]", e);
+        log.warn("[DuplicateKeyException]", e);
         String message = e.getMessage();
         int i = message.indexOf("Duplicate Entry");
         String errMsg = message.substring(i);
@@ -53,7 +54,7 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler
     public Result handleRequestMethodNotSupportedException(HttpRequestMethodNotSupportedException e) {
-        log.warn("全局异常 [RequestMethodNotSupportedException]", e);
+        log.warn("[RequestMethodNotSupportedException]", e);
         return Result.build(null, ResultCode.METHOD_NOT_SUPPORTED);
     }
 
@@ -64,7 +65,7 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(TokenInvalidException.class)
     public ResponseEntity<Result> handleTokenInvalidException(TokenInvalidException e) {
-        log.warn("全局异常 [TokenInvalidException]", e);
+        log.warn("[TokenInvalidException]", e);
         // 构造业务结果对象
         Result result = Result.build(null, ResultCode.NOT_PERMISSION);
 
@@ -83,11 +84,12 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public Result<?> handleValidationException(MethodArgumentNotValidException e) {
         String errorMessage = e.getBindingResult().getFieldError().getDefaultMessage();
-        log.warn("全局异常 [MethodArgumentNotValidException]", e);
+        log.warn("[MethodArgumentNotValidException]", e);
         return Result.build(null, ResultCode.PARAMETER_FAIL.getCode(), errorMessage);
     }
 
     /**
+     * 请求体格式错误异常
      * 参数校验异常，没有传递参数，spring无法解析转换请求参数为DTO
      * @param e
      * @return
@@ -95,10 +97,20 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public Result<?> handleNotReadableBodyException(HttpMessageNotReadableException e) {
         String errorMessage = e.getLocalizedMessage();
-        log.warn("全局异常 [HttpMessageNotReadableException]", e);
+        log.warn("[HttpMessageNotReadableException]", e);
         return Result.build(null, ResultCode.PARAMETER_FAIL);
     }
 
+    /**
+     * 缺少请求参数异常
+     * @param e
+     * @return
+     */
+    @ExceptionHandler(MissingServletRequestParameterException.class)
+    public Result<?> handleMissingServletRequestParameterException(MissingServletRequestParameterException e) {
+        log.warn("[MissingServletRequestParameterException]", e);
+        return Result.build(null, ResultCode.PARAMETER_FAIL.getCode(), String.format("缺少参数 %s %s", e.getParameterType(), e.getParameterName()));
+    }
     /**
      * 登录异常
      * @param e
@@ -106,7 +118,7 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(LoginException.class)
     public Result<?> handleLoginException(LoginException e) {
-        log.warn("全局异常 [LoginException]", e);
+        log.warn("[LoginException]", e);
         return Result.fail(e.getCode(), e.getMessage());
     }
 
