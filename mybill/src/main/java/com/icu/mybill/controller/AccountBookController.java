@@ -87,4 +87,21 @@ public class AccountBookController {
 
         return Result.ok(dto);
     }
+
+    /**
+     * 获取账本详情
+     *
+     * @param id
+     * @return
+     */
+    @GetMapping("detail")
+    @Operation(summary = "获取账本详情", description = "获取账本详情")
+    public Result<AccountBookVO> getById(
+            @Parameter(description = "账本id", required = true) @RequestParam(required = true) Long id
+    ) {
+        AccountBook accountBook = accountBookService.getById(id);
+        AccountBookVO accountBookVO = BeanUtil.copyProperties(accountBook, AccountBookVO.class);
+
+        return Result.ok(accountBookVO);
+    }
 }

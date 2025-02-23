@@ -1,5 +1,6 @@
 package com.icu.mybill.service.impl;
 
+import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.icu.mybill.mapper.AccountBookMapper;
@@ -7,7 +8,10 @@ import com.icu.mybill.pojo.AccountBook;
 import com.icu.mybill.query.BasePageQuery;
 import com.icu.mybill.service.AccountBookService;
 import com.icu.mybill.util.ThreadLocalHelper;
+import com.icu.mybill.vo.accountbook.AccountBookVO;
 import org.springframework.stereotype.Service;
+
+import java.io.Serializable;
 
 /**
 * @author zhangjianzhong
@@ -26,6 +30,13 @@ public class AccountBookServiceImpl extends ServiceImpl<AccountBookMapper, Accou
         this.lambdaQuery().eq(AccountBook::getUserId, ThreadLocalHelper.get().getId()).page(page);
 
         return page;
+    }
+
+    @Override
+    public AccountBook getById(Serializable id) {
+        return this.lambdaQuery()
+                .eq(AccountBook::getId, id)
+                .eq(AccountBook::getUserId, ThreadLocalHelper.get().getId()).one();
     }
 }
 
