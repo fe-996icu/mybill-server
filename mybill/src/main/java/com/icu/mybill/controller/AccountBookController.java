@@ -6,6 +6,8 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.icu.mybill.common.Result;
 import com.icu.mybill.dto.PageDTO;
 import com.icu.mybill.dto.accountbook.CreateAccountBookDTO;
+import com.icu.mybill.dto.accountbook.UpdateAccountBookDTO;
+import com.icu.mybill.enums.ResultCode;
 import com.icu.mybill.pojo.AccountBook;
 import com.icu.mybill.query.BasePageQuery;
 import com.icu.mybill.service.AccountBookService;
@@ -15,7 +17,9 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -103,5 +107,24 @@ public class AccountBookController {
         AccountBookVO accountBookVO = BeanUtil.copyProperties(accountBook, AccountBookVO.class);
 
         return Result.ok(accountBookVO);
+    }
+
+    /**
+     * 更新账本
+     *
+     * @param updateAccountBookDTO
+     * @return
+     */
+    @PostMapping("update")
+    @Operation(summary = "更新账本", description = "更新账本")
+    public Result<Boolean> update(
+            @Parameter(description = "要更新的账本信息", required = true) @RequestBody @Validated UpdateAccountBookDTO updateAccountBookDTO
+    ) {
+        if (StringUtils.isBlank(updateAccountBookDTO.getName()) && StringUtils.isBlank(updateAccountBookDTO.getIcon())){
+            return Result.fail(ResultCode.PARAMETER_FAIL.getCode(), "账本名称和账本图标不能都为空");
+        }
+
+        AccountBook accountBook = BeanUtil.copyProperties(updateAccountBookDTO, AccountBook.class);
+        return Result.ok(accountBookService.updateById(accountBook));
     }
 }

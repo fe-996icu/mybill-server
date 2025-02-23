@@ -24,6 +24,6 @@ public class CreateAccountBookDTO {
     private AccountBookType type;
 
     // 标记参数为必填
-    @Schema(description = "账本排序，从1开始", minimum="1", requiredMode = Schema.RequiredMode.REQUIRED)
+    @Schema(description = "账本排序，从1开始", minimum="1")
     private Integer sort;
 }
