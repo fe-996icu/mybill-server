@@ -108,7 +108,11 @@ public class AccountBookController {
     public Result<AccountBookVO> getById(
             @Parameter(description = "账本id", required = true) @RequestParam(required = true) Long id
     ) {
-        AccountBook accountBook = accountBookService.getById(id);
+        AccountBook accountBook = accountBookService.getOne(
+                Wrappers.lambdaQuery(AccountBook.class)
+                        .eq(AccountBook::getId, id)
+                        .eq(AccountBook::getUserId, ThreadLocalHelper.get().getId())
+        );
         AccountBookVO accountBookVO = BeanUtil.copyProperties(accountBook, AccountBookVO.class);
 
         return Result.ok(accountBookVO);
@@ -129,8 +133,15 @@ public class AccountBookController {
             return Result.fail(ResultCode.PARAMETER_FAIL.getCode(), "账本名称和账本图标不能都为空");
         }
 
-        AccountBook accountBook = BeanUtil.copyProperties(updateAccountBookDTO, AccountBook.class);
-        return Result.ok(accountBookService.updateById(accountBook));
+        boolean result = accountBookService.update(
+                Wrappers.lambdaUpdate(AccountBook.class)
+                        .eq(AccountBook::getId, updateAccountBookDTO.getId())
+                        .eq(AccountBook::getUserId, ThreadLocalHelper.get().getId())
+                        .set(StringUtils.isNotBlank(updateAccountBookDTO.getName()), AccountBook::getName, updateAccountBookDTO.getName())
+                        .set(StringUtils.isNotBlank(updateAccountBookDTO.getIcon()), AccountBook::getIcon, updateAccountBookDTO.getIcon())
+        );
+
+        return Result.ok(result);
     }
 
     /**
