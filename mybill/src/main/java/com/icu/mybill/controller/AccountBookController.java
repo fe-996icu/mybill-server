@@ -3,6 +3,7 @@ package com.icu.mybill.controller;
 import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.conditions.query.QueryChainWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -129,18 +130,20 @@ public class AccountBookController {
     public Result<Boolean> update(
             @Parameter(description = "要更新的账本信息", required = true) @RequestBody @Validated UpdateAccountBookDTO updateAccountBookDTO
     ) {
-        if (StringUtils.isBlank(updateAccountBookDTO.getName()) && StringUtils.isBlank(updateAccountBookDTO.getIcon())){
+        // 账本名称和账本图标不能都为空
+        if (StringUtils.isAllEmpty(updateAccountBookDTO.getName(), updateAccountBookDTO.getIcon())){
             return Result.fail(ResultCode.PARAMETER_FAIL.getCode(), "账本名称和账本图标不能都为空");
         }
 
-        boolean result = accountBookService.update(
-                Wrappers.lambdaUpdate(AccountBook.class)
-                        .eq(AccountBook::getId, updateAccountBookDTO.getId())
-                        .eq(AccountBook::getUserId, ThreadLocalHelper.get().getId())
-                        .set(StringUtils.isNotBlank(updateAccountBookDTO.getName()), AccountBook::getName, updateAccountBookDTO.getName())
-                        .set(StringUtils.isNotBlank(updateAccountBookDTO.getIcon()), AccountBook::getIcon, updateAccountBookDTO.getIcon())
-        );
+        Long userId = ThreadLocalHelper.get().getId();
 
+        LambdaUpdateWrapper<AccountBook> updateWrapper = Wrappers.lambdaUpdate(AccountBook.class)
+                .eq(AccountBook::getId, updateAccountBookDTO.getId())
+                .eq(AccountBook::getUserId, userId)
+                .set(StringUtils.isNotBlank(updateAccountBookDTO.getName()), AccountBook::getName, updateAccountBookDTO.getName())
+                .set(StringUtils.isNotBlank(updateAccountBookDTO.getIcon()), AccountBook::getIcon, updateAccountBookDTO.getIcon());
+
+        boolean result = accountBookService.update(updateWrapper);
         return Result.ok(result);
     }
 
