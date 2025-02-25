@@ -27,17 +27,34 @@ public enum ResultCode {
 
 
     // 10000~10099：用户
-    USERNAME_OR_PASSWORD_ERROR(1001,"用户名或密码错误"),
-    USER_NOT_EXIST(1002,"用户不存在"),
-    USER_NOT_AVAILABLE(1003,"用户状态不可用"),
-    USERNAME_EXIST(1004,"用户名已存在"),
-    PHONE_EXIST(1005,"手机号已存在"),
-    PHONE_NOT_EXIST(1006,"手机号不存在"),
-    PHONE_CODE_ERROR(1007,"验证码错误"),
+    USERNAME_OR_PASSWORD_ERROR(10001,"用户名或密码错误"),
+    USER_NOT_EXIST(10002,"用户不存在"),
+    USER_NOT_AVAILABLE(10003,"用户状态不可用"),
+    USERNAME_EXIST(10004,"用户名已存在"),
+    PHONE_EXIST(10005,"手机号已存在"),
+    PHONE_NOT_EXIST(10006,"手机号不存在"),
+    PHONE_CODE_ERROR(10007,"验证码错误"),
 
-    // 10100~10199：账户类型
-    PARENT_ACCOUNT_TYPE_NOT_EXIST(10100,"父账户类型不存在"),
-    PARENT_ACCOUNT_TYPE_REQUIRE_TOP_LEVEL(10101,"父账户类型必须是顶级"),
+    // 10100~10199：账本
+
+    // 10200~10299：账户类型
+    PARENT_ACCOUNT_TYPE_NOT_EXIST(10200,"父账户类型不存在"),
+    PARENT_ACCOUNT_TYPE_REQUIRE_TOP_LEVEL(10201,"父账户类型必须是顶级"),
+    // 10300~10399：商家类型
+
+    // 10400~10499：成员类型
+
+    // 10500~10599：项目类型
+
+    // 10600~10699：账单分类
+
+    // 10700~10799：账单
+
+    // 10800~10899：分类
+
+    // 10900~10999：模版
+
+    // 11000~11099：其他
 
     ;
 
