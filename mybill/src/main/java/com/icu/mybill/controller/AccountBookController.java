@@ -2,10 +2,8 @@ package com.icu.mybill.controller;
 
 import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
-import com.baomidou.mybatisplus.extension.conditions.query.QueryChainWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.icu.mybill.common.Result;
 import com.icu.mybill.dto.PageDTO;
@@ -22,17 +20,14 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Slf4j
 @RestController
@@ -55,8 +50,7 @@ public class AccountBookController {
     public Result<AccountBookVO> create(
             // 接口参数描述
             @Parameter(description = "要创建的账本对象", required = true)
-            @RequestBody
-            CreateAccountBookDTO createAccountBookDTO
+            @RequestBody @Validated CreateAccountBookDTO createAccountBookDTO
     ) {
         AccountBook accountBook = BeanUtil.copyProperties(createAccountBookDTO, AccountBook.class);
         accountBook.setUserId(ThreadLocalHelper.get().getId());
@@ -111,7 +105,7 @@ public class AccountBookController {
     @GetMapping("detail")
     @Operation(summary = "获取账本详情", description = "获取账本详情")
     public Result<AccountBookVO> getById(
-            @Parameter(description = "账本id", required = true) @RequestParam(required = true) Long id
+            @Parameter(description = "账本id", required = true) @RequestParam() Long id
     ) {
         AccountBook accountBook = accountBookService.getOne(
                 Wrappers.lambdaQuery(AccountBook.class)

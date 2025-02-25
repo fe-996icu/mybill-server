@@ -3,6 +3,7 @@ package com.icu.mybill.dto.accountbook;
 import com.icu.mybill.enums.AccountBookType;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
 
@@ -19,7 +20,7 @@ public class CreateAccountBookDTO {
     @Schema(description = "账本图标")
     private String icon;
 
-    @NotBlank(message = "账本类型不能为空")
+    @NotNull(message = "账本类型不能为空")
     @Schema(description = "账本类型", requiredMode = Schema.RequiredMode.REQUIRED)
     private AccountBookType type;
 
