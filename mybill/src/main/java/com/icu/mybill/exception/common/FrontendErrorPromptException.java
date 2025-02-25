@@ -10,13 +10,13 @@ import lombok.Getter;
  * @author zhangjianzhong
  */
 @Getter
-public class FRONTEND_ERROR_PROMPT_EXCEPTION extends RuntimeException {
+public class FrontendErrorPromptException extends RuntimeException {
     /**
      * 错误码
      */
     private final int code;
 
-    public FRONTEND_ERROR_PROMPT_EXCEPTION(ResultCode resultCode) {
+    public FrontendErrorPromptException(ResultCode resultCode) {
         super(resultCode.getMessage());
         this.code = resultCode.getCode();
     }

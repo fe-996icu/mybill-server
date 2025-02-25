@@ -1,11 +1,9 @@
 package com.icu.mybill.exception;
 
 import com.icu.mybill.common.Result;
-import com.icu.mybill.dto.accountbook.UpdateAccountBookSortDTO;
 import com.icu.mybill.enums.ResultCode;
-import com.icu.mybill.exception.user.LoginException;
+import com.icu.mybill.exception.common.FrontendErrorPromptException;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.ibatis.jdbc.Null;
 import org.springframework.context.MessageSourceResolvable;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.http.HttpStatus;
@@ -13,8 +11,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.jdbc.BadSqlGrammarException;
 import org.springframework.validation.FieldError;
-import org.springframework.validation.ObjectError;
-import org.springframework.validation.beanvalidation.SpringValidatorAdapter;
 import org.springframework.validation.method.ParameterValidationResult;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -25,12 +21,7 @@ import org.springframework.web.method.annotation.HandlerMethodValidationExceptio
 import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 
 @Slf4j
 // @RestControllerAdvice 表示全局异常处理器，拦截所有 @Controller 抛出的异常
@@ -163,13 +154,13 @@ public class GlobalExceptionHandler {
     }
 
     /**
-     * 登录异常
+     * 用户返回给前端的错误提示异常
      * @param e
      * @return
      */
-    @ExceptionHandler(LoginException.class)
-    public Result<?> handleLoginException(LoginException e) {
-        log.warn("[LoginException]", e);
+    @ExceptionHandler(FrontendErrorPromptException.class)
+    public Result<?> handleFrontendErrorPromptException(FrontendErrorPromptException e) {
+        log.debug("[FrontendErrorPromptException]", e);
         return Result.fail(e.getCode(), e.getMessage());
     }
 
@@ -180,7 +171,7 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(NoResourceFoundException.class)
     public Result<?> handleLoginException(NoResourceFoundException e) throws NoResourceFoundException {
-        log.warn("全局异 [NoResourceFoundException]", e);
+        log.warn("[NoResourceFoundException]", e);
         // return Result.fail(ResultCode.RESOURCE_NOT_FOUND);
         // 不做处理，直接抛出异常，让全局异常处理器处理
         throw e;
