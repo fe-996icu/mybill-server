@@ -26,7 +26,7 @@ public enum ResultCode {
 
 
 
-
+    // 10000~10099：用户
     USERNAME_OR_PASSWORD_ERROR(1001,"用户名或密码错误"),
     USER_NOT_EXIST(1002,"用户不存在"),
     USER_NOT_AVAILABLE(1003,"用户状态不可用"),
@@ -34,6 +34,11 @@ public enum ResultCode {
     PHONE_EXIST(1005,"手机号已存在"),
     PHONE_NOT_EXIST(1006,"手机号不存在"),
     PHONE_CODE_ERROR(1007,"验证码错误"),
+
+    // 10100~10199：账户类型
+    PARENT_ACCOUNT_TYPE_NOT_EXIST(10100,"父账户类型不存在"),
+    PARENT_ACCOUNT_TYPE_REQUIRE_TOP_LEVEL(10101,"父账户类型必须是顶级"),
+
     ;
 
     @JsonValue
