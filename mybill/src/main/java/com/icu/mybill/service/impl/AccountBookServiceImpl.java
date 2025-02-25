@@ -3,15 +3,18 @@ package com.icu.mybill.service.impl;
 import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.icu.mybill.dto.accountbook.UpdateAccountBookSortDTO;
 import com.icu.mybill.mapper.AccountBookMapper;
 import com.icu.mybill.pojo.AccountBook;
 import com.icu.mybill.query.BasePageQuery;
 import com.icu.mybill.service.AccountBookService;
 import com.icu.mybill.util.ThreadLocalHelper;
 import com.icu.mybill.vo.accountbook.AccountBookVO;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
 * @author zhangjianzhong
@@ -21,6 +24,16 @@ import java.io.Serializable;
 @Service
 public class AccountBookServiceImpl extends ServiceImpl<AccountBookMapper, AccountBook>
     implements AccountBookService{
+
+    @Autowired
+    private AccountBookMapper accountBookMapper;
+
+    @Override
+    public Boolean updateSort(List<UpdateAccountBookSortDTO> list) {
+        Long userId = ThreadLocalHelper.get().getId();
+
+        return this.accountBookMapper.updateSort(userId, list);
+    }
 
     @Override
     public Page<AccountBook> pageQuery(BasePageQuery query) {

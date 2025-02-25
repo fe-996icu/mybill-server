@@ -1,7 +1,10 @@
 package com.icu.mybill.mapper;
 
+import com.icu.mybill.dto.accountbook.UpdateAccountBookSortDTO;
 import com.icu.mybill.pojo.AccountBook;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+
+import java.util.List;
 
 /**
 * @author zhangjianzhong
@@ -11,6 +14,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 */
 public interface AccountBookMapper extends BaseMapper<AccountBook> {
 
+    Boolean updateSort(Long userId, List<UpdateAccountBookSortDTO> list);
 }
 
 

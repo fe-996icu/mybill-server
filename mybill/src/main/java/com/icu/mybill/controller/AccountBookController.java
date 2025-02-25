@@ -11,6 +11,7 @@ import com.icu.mybill.common.Result;
 import com.icu.mybill.dto.PageDTO;
 import com.icu.mybill.dto.accountbook.CreateAccountBookDTO;
 import com.icu.mybill.dto.accountbook.UpdateAccountBookDTO;
+import com.icu.mybill.dto.accountbook.UpdateAccountBookSortDTO;
 import com.icu.mybill.enums.ResultCode;
 import com.icu.mybill.pojo.AccountBook;
 import com.icu.mybill.query.BasePageQuery;
@@ -20,9 +21,12 @@ import com.icu.mybill.vo.accountbook.AccountBookVO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotEmpty;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -125,7 +129,7 @@ public class AccountBookController {
      * @param updateAccountBookDTO
      * @return
      */
-    @PostMapping("update")
+    @PutMapping("update")
     @Operation(summary = "更新账本", description = "更新账本")
     public Result<Boolean> update(
             @Parameter(description = "要更新的账本信息", required = true) @RequestBody @Validated UpdateAccountBookDTO updateAccountBookDTO
@@ -163,6 +167,21 @@ public class AccountBookController {
                         .eq(AccountBook::getId, id)
                         .eq(AccountBook::getUserId, ThreadLocalHelper.get().getId())
         );
+        return Result.ok(result);
+    }
+
+    @PutMapping("sort")
+    @Operation(summary = "更新账本排序", description = "更新账本排序")
+    public Result<Boolean> updateSort(
+            @Parameter(description = "更新账本排序", required = true)
+            // 使用@Valid校验List中的DTO对象字段，因为@Validation只会校验参数类型的DTO字段，不会校验List中的
+            @RequestBody @Valid List<UpdateAccountBookSortDTO> list
+    ) {
+        if (list.isEmpty()) {
+            return Result.fail(ResultCode.PARAMETER_FAIL.getCode(), "数据列表不能为空");
+        }
+
+        Boolean result = accountBookService.updateSort(list);
         return Result.ok(result);
     }
 }

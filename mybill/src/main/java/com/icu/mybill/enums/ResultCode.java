@@ -17,10 +17,15 @@ public enum ResultCode {
     RESOURCE_NOT_FOUND(404,"资源未找到"),
     METHOD_NOT_SUPPORTED(405,"请求方法不支持"),
     SERVER_ERROR(500,"对不起,服务器异常,请稍后重试"),
-    USERNAME_ERROR(501,"usernameError"),
-    PASSWORD_ERROR(503,"passwordError"),
-    NOT_LOGIN(504,"notLogin"),
-    USERNAME_USED(505,"userNameUsed"),
+    SQL_SYNTAX_ERROR(5001,"SQL语法错误"),
+    DATABASE_CONNECTION_FAILURE(5002,"数据库连接失败"),
+    UNIQUE_CONSTRAINT_CONFLICT(5003,"唯一约束冲突"),
+    FOREIGN_KEY_CONSTRAINT_CONFLICT(5004,"外键约束冲突"),
+    DATA_DOES_NOT_EXIST(5005,"数据不存在"),
+    DATABASE_TIMEOUT(5006,"数据库超时"),
+
+
+
 
     USERNAME_OR_PASSWORD_ERROR(1001,"用户名或密码错误"),
     USER_NOT_EXIST(1002,"用户不存在"),

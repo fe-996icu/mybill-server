@@ -15,8 +15,18 @@
             <result property="lastUpdateTime" column="last_update_time" />
     </resultMap>
 
-    <sql id="Base_Column_List">
-        id,name,icon,type,sort,user_id,
-        create_time,last_update_time
-    </sql>
+    <update id="updateSort" parameterType="com.icu.mybill.dto.accountbook.UpdateAccountBookSortDTO">
+        update account_book
+            set
+                sort = case id
+                    <foreach collection="list" item="item" separator=" ">
+                        when #{item.id} then #{item.sort}
+                    </foreach>
+                end
+            where user_id = #{userId} and id in
+                  <foreach collection="list" item="item" separator="," open ="(" close=")">
+                      #{item.id}
+                  </foreach>
+        ;
+    </update>
 </mapper>
