@@ -11,7 +11,7 @@ import com.icu.mybill.dto.user.RegisterUserByPhoneDTO;
 import com.icu.mybill.dto.user.RegisterUserByUsernameDTO;
 import com.icu.mybill.enums.ResultCode;
 import com.icu.mybill.enums.UserStatus;
-import com.icu.mybill.exception.user.LoginException;
+import com.icu.mybill.exception.common.FrontendErrorPromptException;
 import com.icu.mybill.mapper.*;
 import com.icu.mybill.pojo.*;
 import com.icu.mybill.service.UserService;
@@ -51,19 +51,19 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
     private AccountTypeMapper accountTypeMapper;
 
     @Override
-    public User login(LoginByUsernameDTO loginDTO) throws LoginException {
+    public User login(LoginByUsernameDTO loginDTO) throws FrontendErrorPromptException {
         User user = this.lambdaQuery()
                 .eq(User::getUsername, loginDTO.getUsername())
                 .one();
 
         // 未查询到用户
         if (user == null){
-            throw new LoginException(ResultCode.USERNAME_OR_PASSWORD_ERROR);
+            throw new FrontendErrorPromptException(ResultCode.USERNAME_OR_PASSWORD_ERROR);
         }
 
         // 密码校验
         if (!Argon2Helper.checkPassword(user.getPassword(), loginDTO.getPassword())) {
-            throw new LoginException(ResultCode.USERNAME_OR_PASSWORD_ERROR);
+            throw new FrontendErrorPromptException(ResultCode.USERNAME_OR_PASSWORD_ERROR);
         }
 
         this.checkUserStatusAndUpdateLoginInfo(loginDTO.getLastLoginIp(), loginDTO.getDevice(), user);
@@ -79,7 +79,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
 
         // 未查询到用户
         if (user == null){
-            throw new LoginException(ResultCode.USER_NOT_EXIST);
+            throw new FrontendErrorPromptException(ResultCode.USER_NOT_EXIST);
         }
 
         this.checkUserStatusAndUpdateLoginInfo(loginByPhoneDTO.getLastLoginIp(), loginByPhoneDTO.getDevice(), user);
@@ -92,7 +92,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         // 用户状态为非正常
         if (user.getStatus() != UserStatus.NORMAL){
             log.info("用户登录失败，用户状态为：[username={}]-[phone={}]-[status={}]", user.getUsername(), user.getPhone(), user.getStatus());
-            throw new LoginException(ResultCode.USER_NOT_AVAILABLE);
+            throw new FrontendErrorPromptException(ResultCode.USER_NOT_AVAILABLE);
         }
 
         // 更新：登录信息和最后更新时间
