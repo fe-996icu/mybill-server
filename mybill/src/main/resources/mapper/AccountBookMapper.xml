@@ -15,7 +15,7 @@
             <result property="lastUpdateTime" column="last_update_time" />
     </resultMap>
 
-    <update id="updateSort" parameterType="com.icu.mybill.dto.accountbook.UpdateAccountBookSortDTO">
+    <update id="updateSort">
         update account_book
             set
                 sort = case id
