@@ -45,7 +45,7 @@ public class BillCategory {
     private Integer sort;
 
     /**
-     * 父分类id（逻辑外键）
+     * 父分类id，只允许有一级和二级，null为一级，非null为二级（逻辑外键）
      */
     private Long parentId;
 

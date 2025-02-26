@@ -18,7 +18,7 @@ public class CreateAccountTypeDTO {
     @Schema(description = "账户类型图标")
     private String icon;
 
-    @Schema(description = "父账本类型ID")
+    @Schema(description = "父账本类型ID，只允许有一级和二级，null为一级，非null为二级")
     private Long parentId;
 
     @Schema(description = "账本排序，从1开始", minimum="1")

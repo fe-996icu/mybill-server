@@ -43,7 +43,7 @@ create table account_type (
     name varchar(25) not null comment '账户类型名称',
     icon varchar(255) null comment '账户类型图标',
     sort int null comment '排序字段',
-    parent_id bigint null comment '父账户类型id（逻辑外键）',
+    parent_id bigint null comment '父账户类型id，只允许有一级和二级，null为一级，非null为二级（逻辑外键）',
     user_id bigint not null comment '所属用户id（逻辑外键）',
     create_time datetime not null default now() comment '创建时间',
     last_update_time datetime on update current_timestamp comment '最后更新时间'
@@ -97,7 +97,7 @@ create table bill_category (
     type tinyint not null default 1 comment '账单类型：1-支出, 2-收入',
     icon varchar(255) null comment '分类图标',
     sort int null comment '排序字段',
-    parent_id bigint null comment '父分类id（逻辑外键）',
+    parent_id bigint null comment '父分类id，只允许有一级和二级，null为一级，非null为二级（逻辑外键）',
     user_id bigint not null comment '所属用户id（逻辑外键）',
     create_time datetime not null default now() comment '创建时间',
     last_update_time datetime on update current_timestamp comment '最后更新时间'

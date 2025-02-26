@@ -28,7 +28,7 @@ public class AccountTypeVO {
     /**
      * 账户类型父节点ID
      */
-    @Schema(description = "账户类型父节点ID")
+    @Schema(description = "账户类型父节点ID，只允许有一级和二级，null为一级，非null为二级")
     private Long parentId;
 
     /**
