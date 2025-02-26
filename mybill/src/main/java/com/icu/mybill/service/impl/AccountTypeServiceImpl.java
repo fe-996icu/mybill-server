@@ -1,7 +1,6 @@
 package com.icu.mybill.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
-import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.icu.mybill.dto.accounttype.UpdateAccountTypeDTO;
@@ -32,12 +31,12 @@ public class AccountTypeServiceImpl extends ServiceImpl<AccountTypeMapper, Accou
     }
 
     @Override
-    public Boolean updateSort(List<UpdateAccountTypeSortDTO> list) {
-        return null;
+    public boolean updateSort(List<UpdateAccountTypeSortDTO> list) {
+        return true;
     }
 
     @Override
-    public Boolean saveAccountType(AccountType accountType) {
+    public boolean saveAccountType(AccountType accountType) {
         Long userId = ThreadLocalHelper.get().getId();
         accountType.setUserId(userId);
 
@@ -68,7 +67,7 @@ public class AccountTypeServiceImpl extends ServiceImpl<AccountTypeMapper, Accou
     }
 
     @Override
-    public Boolean updateData(UpdateAccountTypeDTO updateAccountTypeDTO) {
+    public boolean updateData(UpdateAccountTypeDTO updateAccountTypeDTO) {
         Long userId = ThreadLocalHelper.get().getId();
 
         AccountType accountType = this.getById(updateAccountTypeDTO.getId());
@@ -87,7 +86,7 @@ public class AccountTypeServiceImpl extends ServiceImpl<AccountTypeMapper, Accou
     }
 
     @Override
-    public Boolean deleteById(Long accountTypeId) {
+    public boolean deleteById(Long accountTypeId) {
         AccountType accountType = this.getById(accountTypeId);
 
         if (accountType == null){

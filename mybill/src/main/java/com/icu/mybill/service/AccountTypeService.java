@@ -18,11 +18,11 @@ public interface AccountTypeService extends IService<AccountType> {
 
     Page<AccountType> pageQuery(BasePageQuery basePageQuery);
 
-    Boolean updateSort(List<UpdateAccountTypeSortDTO> list);
+    boolean updateSort(List<UpdateAccountTypeSortDTO> list);
 
-    Boolean saveAccountType(AccountType accountType);
+    boolean saveAccountType(AccountType accountType);
 
-    Boolean updateData(UpdateAccountTypeDTO updateAccountTypeDTO);
+    boolean updateData(UpdateAccountTypeDTO updateAccountTypeDTO);
 
-    Boolean deleteById(Long accountTypeId);
+    boolean deleteById(Long accountTypeId);
 }
