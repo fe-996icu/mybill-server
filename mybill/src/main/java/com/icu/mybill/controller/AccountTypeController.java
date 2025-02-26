@@ -146,13 +146,9 @@ public class AccountTypeController {
     @DeleteMapping("delete")
     @Operation(summary = "删除账户类型", description = "删除账户类型")
     public Result<Boolean> delete(
-            @Parameter(description = "账户类型id", required = true) @RequestParam Long id
+            @Parameter(description = "账户类型id", required = true) @RequestParam("id") Long accountTypeId
     ) {
-        boolean result = accountTypeService.remove(
-                Wrappers.lambdaQuery(AccountType.class)
-                        .eq(AccountType::getId, id)
-                        .eq(AccountType::getUserId, ThreadLocalHelper.get().getId())
-        );
+        boolean result = accountTypeService.deleteById(accountTypeId);
         return Result.ok(result);
     }
 

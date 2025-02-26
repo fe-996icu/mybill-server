@@ -1,6 +1,7 @@
 package com.icu.mybill.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.icu.mybill.dto.accounttype.UpdateAccountTypeDTO;
@@ -83,6 +84,21 @@ public class AccountTypeServiceImpl extends ServiceImpl<AccountTypeMapper, Accou
         AccountType updateAccountType = BeanUtil.copyProperties(updateAccountTypeDTO, AccountType.class);
 
         return this.updateById(updateAccountType);
+    }
+
+    @Override
+    public Boolean deleteById(Long accountTypeId) {
+        AccountType accountType = this.getById(accountTypeId);
+
+        if (accountType == null){
+            throw new FrontendErrorPromptException(ResultCode.NOT_QUERY_NEED_OPERATE_DATA_ERROR);
+        }
+
+        if (!accountType.getUserId().equals(ThreadLocalHelper.get().getId())){
+            throw new FrontendErrorPromptException(ResultCode.DELETE_DATA_NOT_SELF_ERROR);
+        }
+
+        return this.removeById(accountTypeId);
     }
 }
 

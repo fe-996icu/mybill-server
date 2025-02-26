@@ -23,4 +23,6 @@ public interface AccountTypeService extends IService<AccountType> {
     Boolean saveAccountType(AccountType accountType);
 
     Boolean updateData(UpdateAccountTypeDTO updateAccountTypeDTO);
+
+    Boolean deleteById(Long accountTypeId);
 }
