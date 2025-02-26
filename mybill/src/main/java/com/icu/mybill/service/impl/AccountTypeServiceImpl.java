@@ -35,13 +35,15 @@ public class AccountTypeServiceImpl extends ServiceImpl<AccountTypeMapper, Accou
 
     @Override
     public Boolean saveAccountType(AccountType accountType) {
+        Long userId = ThreadLocalHelper.get().getId();
+        accountType.setUserId(userId);
+
         // parentId是null，直接保存（一级账户类型）
         Long parentId = accountType.getParentId();
         if (parentId == null) {
             return this.save(accountType);
         }
 
-        Long userId = ThreadLocalHelper.get().getId();
 
         // 查询父级账户类型
         AccountType parentAccountType = this.lambdaQuery()

@@ -52,7 +52,6 @@ public class AccountTypeController {
             @RequestBody @Validated CreateAccountTypeDTO createAccountTypeDTO
     ) {
         AccountType AccountType = BeanUtil.copyProperties(createAccountTypeDTO, AccountType.class);
-        AccountType.setUserId(ThreadLocalHelper.get().getId());
 
         accountTypeService.saveAccountType(AccountType);
 
