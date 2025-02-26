@@ -11,6 +11,7 @@ import com.icu.mybill.dto.accounttype.CreateAccountTypeDTO;
 import com.icu.mybill.dto.accounttype.UpdateAccountTypeDTO;
 import com.icu.mybill.dto.accounttype.UpdateAccountTypeSortDTO;
 import com.icu.mybill.enums.ResultCode;
+import com.icu.mybill.exception.common.FrontendErrorPromptException;
 import com.icu.mybill.pojo.AccountType;
 import com.icu.mybill.query.BasePageQuery;
 import com.icu.mybill.service.AccountTypeService;
@@ -128,18 +129,11 @@ public class AccountTypeController {
     ) {
         // 账户类型名称和账户类型图标不能都为空
         if (StringUtils.isAllEmpty(updateAccountTypeDTO.getName(), updateAccountTypeDTO.getIcon())){
-            return Result.fail(ResultCode.PARAMETER_FAIL.getCode(), "账户类型名称和账户类型图标不能都为空");
+            throw new FrontendErrorPromptException(ResultCode.UPDATE_REQUIRE_ONE_FIELD_ERROR);
         }
 
-        Long userId = ThreadLocalHelper.get().getId();
+        boolean result = accountTypeService.updateData(updateAccountTypeDTO);
 
-        LambdaUpdateWrapper<AccountType> updateWrapper = Wrappers.lambdaUpdate(AccountType.class)
-                .eq(AccountType::getId, updateAccountTypeDTO.getId())
-                .eq(AccountType::getUserId, userId)
-                .set(StringUtils.isNotBlank(updateAccountTypeDTO.getName()), AccountType::getName, updateAccountTypeDTO.getName())
-                .set(StringUtils.isNotBlank(updateAccountTypeDTO.getIcon()), AccountType::getIcon, updateAccountTypeDTO.getIcon());
-
-        boolean result = accountTypeService.update(updateWrapper);
         return Result.ok(result);
     }
 

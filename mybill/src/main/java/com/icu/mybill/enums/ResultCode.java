@@ -17,12 +17,29 @@ public enum ResultCode {
     RESOURCE_NOT_FOUND(404,"资源未找到"),
     METHOD_NOT_SUPPORTED(405,"请求方法不支持"),
     SERVER_ERROR(500,"对不起,服务器异常,请稍后重试"),
+
     SQL_SYNTAX_ERROR(5001,"SQL语法错误"),
     DATABASE_CONNECTION_FAILURE(5002,"数据库连接失败"),
     UNIQUE_CONSTRAINT_CONFLICT(5003,"唯一约束冲突"),
     FOREIGN_KEY_CONSTRAINT_CONFLICT(5004,"外键约束冲突"),
     DATA_DOES_NOT_EXIST(5005,"数据不存在"),
     DATABASE_TIMEOUT(5006,"数据库超时"),
+
+
+    // 新增的数据不是自己的
+    CREATE_DATA_NOT_SELF_ERROR(5101,"创建的数据不是本人数据"),
+    // 删除的数据不是自己的
+    DELETE_DATA_NOT_SELF_ERROR(5102,"删除的数据不是本人数据"),
+    // 修改的数据不是自己的
+    UPDATE_DATA_NOT_SELF_ERROR(5103,"修改的数据不是本人数据"),
+    // 查询的数据不是自己的
+    QUERY_DATA_NOT_SELF_ERROR(5104,"查询的数据不是本人数据"),
+    // 使用的父级数据不是自己的
+    REFERENCE_PARENT_DATA_NOT_SELF_ERROR(5105,"使用的父级数据不是本人数据"),
+    // 增删改时未查询到需要操作的数据
+    NOT_QUERY_NEED_OPERATE_DATA_ERROR(5106,"未查询到需要操作的数据"),
+
+    UPDATE_REQUIRE_ONE_FIELD_ERROR(5120,"至少更新一个字段"),
 
 
 

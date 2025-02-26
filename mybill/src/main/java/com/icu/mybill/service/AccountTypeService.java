@@ -1,6 +1,7 @@
 package com.icu.mybill.service;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.icu.mybill.dto.accounttype.UpdateAccountTypeDTO;
 import com.icu.mybill.dto.accounttype.UpdateAccountTypeSortDTO;
 import com.icu.mybill.pojo.AccountType;
 import com.baomidou.mybatisplus.extension.service.IService;
@@ -20,4 +21,6 @@ public interface AccountTypeService extends IService<AccountType> {
     Boolean updateSort(List<UpdateAccountTypeSortDTO> list);
 
     Boolean saveAccountType(AccountType accountType);
+
+    Boolean updateData(UpdateAccountTypeDTO updateAccountTypeDTO);
 }
