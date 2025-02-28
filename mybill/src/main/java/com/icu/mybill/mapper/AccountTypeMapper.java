@@ -1,7 +1,10 @@
 package com.icu.mybill.mapper;
 
+import com.icu.mybill.dto.accounttype.UpdateAccountTypeSortDTO;
 import com.icu.mybill.pojo.AccountType;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+
+import java.util.List;
 
 /**
 * @author zhangjianzhong
@@ -11,6 +14,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 */
 public interface AccountTypeMapper extends BaseMapper<AccountType> {
 
+    boolean updateSort(Long userId, List<UpdateAccountTypeSortDTO> list);
 }
 
 
