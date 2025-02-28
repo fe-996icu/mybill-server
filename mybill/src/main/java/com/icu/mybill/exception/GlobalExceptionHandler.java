@@ -18,6 +18,7 @@ import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.HandlerMethodValidationException;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 import java.util.ArrayList;
@@ -83,6 +84,19 @@ public class GlobalExceptionHandler {
                 .body(result);
     }
 
+    /**
+     * 参数类型不匹配异常<br>
+     * 1. spring的controller参数类型不匹配，如：参数类型需要 Integer，但传递的事 String，需要枚举类型，传递的值不在枚举范围内
+     * @param e
+     * @return
+     */
+    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+    public Result<?> handleMethodArgumentTypeMismatchException(MethodArgumentTypeMismatchException e) {
+        log.warn("[MethodArgumentTypeMismatchException]", e);
+        String[] split = e.getRequiredType().getName().split("\\.");
+        String requiredType = split[split.length - 1];
+        return Result.build(null, ResultCode.PARAMETER_FAIL.getCode(), String.format("参数 %s 类型错误，类型必须是 %s", e.getName(), requiredType));
+    }
 
     /**
      * 参数校验异常，缺少参数，或者 参数格式错误
