@@ -1,21 +1,18 @@
 package com.icu.mybill.controller;
 
 import cn.hutool.core.bean.BeanUtil;
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
+import cn.hutool.core.lang.tree.Tree;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.icu.mybill.common.Result;
-import com.icu.mybill.dto.PageDTO;
 import com.icu.mybill.dto.accounttype.CreateAccountTypeDTO;
 import com.icu.mybill.dto.accounttype.UpdateAccountTypeDTO;
 import com.icu.mybill.dto.accounttype.UpdateAccountTypeSortDTO;
 import com.icu.mybill.enums.ResultCode;
 import com.icu.mybill.exception.common.FrontendErrorPromptException;
 import com.icu.mybill.pojo.AccountType;
-import com.icu.mybill.query.BasePageQuery;
 import com.icu.mybill.service.AccountTypeService;
 import com.icu.mybill.util.ThreadLocalHelper;
+import com.icu.mybill.util.TreeDataHelper;
 import com.icu.mybill.vo.accounttype.AccountTypeVO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -67,53 +64,17 @@ public class AccountTypeController {
     @GetMapping("list")
     @Operation(summary = "获取账户类型全部列表", description = "获取账户类型全部列表")
     public Result<List<AccountTypeVO>> list() {
-        LambdaQueryWrapper<AccountType> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.eq(AccountType::getUserId, ThreadLocalHelper.get().getId());
-        queryWrapper.orderByDesc(AccountType::getSort, AccountType::getCreateTime);
-
-        List<AccountType> list = this.accountTypeService.list(queryWrapper);
-        List<AccountTypeVO> AccountTypeVOS = BeanUtil.copyToList(list, AccountTypeVO.class);
-
-        return Result.ok(AccountTypeVOS);
-    }
-
-    /**
-     * 分页获取账户类型列表
-     *
-     * @param basePageQuery
-     * @return
-     */
-    @GetMapping("page")
-    @Operation(summary = "分页获取账户类型列表", description = "分页获取账户类型列表")
-    public Result<PageDTO<AccountTypeVO>> page(
-            @Parameter(description = "分页查询参数")
-            @ModelAttribute() BasePageQuery basePageQuery
-    ) {
-        Page<AccountType> page = accountTypeService.pageQuery(basePageQuery);
-        PageDTO<AccountTypeVO> dto = PageDTO.of(page, AccountTypeVO.class);
-
-        return Result.ok(dto);
-    }
-
-    /**
-     * 获取账户类型详情
-     *
-     * @param id
-     * @return
-     */
-    @GetMapping("detail")
-    @Operation(summary = "获取账户类型详情", description = "获取账户类型详情")
-    public Result<AccountTypeVO> getById(
-            @Parameter(description = "账户类型id", required = true) @RequestParam(required = true) Long id
-    ) {
-        AccountType accountType = accountTypeService.getOne(
+        List<AccountType> list = this.accountTypeService.list(
                 Wrappers.lambdaQuery(AccountType.class)
-                        .eq(AccountType::getId, id)
                         .eq(AccountType::getUserId, ThreadLocalHelper.get().getId())
         );
-        AccountTypeVO AccountTypeVO = BeanUtil.copyProperties(accountType, AccountTypeVO.class);
 
-        return Result.ok(AccountTypeVO);
+        // 生成树形结构
+        List<Tree<Long>> treeList = TreeDataHelper.beanListToTreeList(list);
+        // 转一下，方便明确返回值类型，swagger自动识别VO，否则生成的文档字段是Tree的不直观
+        List<AccountTypeVO> accountTypeVOS = BeanUtil.copyToList(treeList, AccountTypeVO.class);
+
+        return Result.ok(accountTypeVOS);
     }
 
     /**
@@ -140,7 +101,7 @@ public class AccountTypeController {
     /**
      * 删除账户类型
      *
-     * @param id
+     * @param accountTypeId
      * @return
      */
     @DeleteMapping("delete")

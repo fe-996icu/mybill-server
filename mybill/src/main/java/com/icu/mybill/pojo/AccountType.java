@@ -1,13 +1,13 @@
 package com.icu.mybill.pojo;
 
 import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.experimental.FieldNameConstants;
 
 import java.time.LocalDateTime;
-import java.util.Date;
-import lombok.Data;
 
 /**
  * 账户类型表
@@ -15,6 +15,8 @@ import lombok.Data;
  */
 @TableName(value ="account_type")
 @Data
+@AllArgsConstructor
+@FieldNameConstants
 public class AccountType {
     /**
      * 账户类型id

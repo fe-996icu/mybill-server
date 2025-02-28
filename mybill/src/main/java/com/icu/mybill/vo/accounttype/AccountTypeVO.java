@@ -3,6 +3,8 @@ package com.icu.mybill.vo.accounttype;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
+import java.util.List;
+
 @Data
 // 不指定name ，用类名作为schema的名称更直观
 @Schema(/* name="账户类型VO", */ description = "账户类型VO")
@@ -36,5 +38,11 @@ public class AccountTypeVO {
      */
     @Schema(description = "排序字段")
     private Integer sort;
+
+    /**
+     * 账户类型子节点列表
+     */
+    @Schema(description = "账户类型子节点，没有子节点可能为null")
+    private List<AccountTypeVO> children;
 
 }
