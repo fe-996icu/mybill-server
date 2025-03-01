@@ -55,7 +55,7 @@ public class BillCategoryServiceImpl extends ServiceImpl<BillCategoryMapper, Bil
 
     @Override
     @Transactional
-    public boolean saveParentAndChild(BillCategory parent, List<BillCategory> children) {
+    public boolean saveParentAndChildren(BillCategory parent, List<BillCategory> children) {
         Long userId = ThreadLocalHelper.get().getId();
 
         // 保存父级账单分类
@@ -75,7 +75,7 @@ public class BillCategoryServiceImpl extends ServiceImpl<BillCategoryMapper, Bil
 
     @Transactional
     @Override
-    public boolean saveSub(BillCategory billCategory) {
+    public boolean saveChildren(BillCategory billCategory) {
         Long userId = ThreadLocalHelper.get().getId();
 
         // 没有查询到父账户类型

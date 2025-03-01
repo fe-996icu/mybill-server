@@ -21,8 +21,6 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,7 +45,7 @@ public class BillCategoryController {
      * @param createParentAndChildrenBillCategoryDTO
      * @return
      */
-    @PostMapping("createParentAndChild")
+    @PostMapping("createParentAndChildren")
     // 接口名和接口描述
     @Operation(summary = "创建账单分类（父分类和子分类）", description = "创建账单分类（父分类和子分类）")
     public Result<BillCategoryVO> createParentAndChildren(
@@ -58,7 +56,7 @@ public class BillCategoryController {
         BillCategory parent = BeanUtil.copyProperties(createParentAndChildrenBillCategoryDTO, BillCategory.class);
         List<BillCategory> children = BeanUtil.copyToList(createParentAndChildrenBillCategoryDTO.getChildren(), BillCategory.class);
 
-        billCategoryService.saveParentAndChild(parent, children);
+        billCategoryService.saveParentAndChildren(parent, children);
 
         BillCategoryVO parentVo = BeanUtil.copyProperties(parent, BillCategoryVO.class);
         parentVo.setChildren(BeanUtil.copyToList(children, BillCategoryVO.class));
@@ -73,7 +71,7 @@ public class BillCategoryController {
      * @return
      */
     @Transactional
-    @PostMapping("createChild")
+    @PostMapping("createChildren")
     // 接口名和接口描述
     @Operation(summary = "创建二级账单分类", description = "创建二级账单分类，接收一个账单分类对象，必须包含parentId")
     public Result<BillCategoryVO> create(
@@ -82,7 +80,7 @@ public class BillCategoryController {
             @RequestBody @Validated CreateChildrenBillCategoryDTO createChildrenBillCategoryDTO
     ) {
         BillCategory billCategory = BeanUtil.copyProperties(createChildrenBillCategoryDTO, BillCategory.class);
-        billCategoryService.saveSub(billCategory);
+        billCategoryService.saveChildren(billCategory);
         return Result.ok(BeanUtil.copyProperties(billCategory, BillCategoryVO.class));
     }
 

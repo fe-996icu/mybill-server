@@ -16,9 +16,9 @@ public interface BillCategoryService extends IService<BillCategory> {
 
     boolean updateSort(List<UpdateBillCategorySortDTO> list);
 
-    boolean saveParentAndChild(BillCategory parent, List<BillCategory> children);
+    boolean saveParentAndChildren(BillCategory parent, List<BillCategory> children);
 
-    boolean saveSub(BillCategory billCategory);
+    boolean saveChildren(BillCategory billCategory);
 
     boolean updateData(UpdateBillCategoryDTO updateBillCategoryDTO);
 
