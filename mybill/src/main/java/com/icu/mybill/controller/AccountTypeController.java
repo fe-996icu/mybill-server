@@ -4,7 +4,8 @@ import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.lang.tree.Tree;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.icu.mybill.common.Result;
-import com.icu.mybill.dto.accounttype.CreateAccountTypeDTO;
+import com.icu.mybill.dto.accounttype.CreateChildrenAccountTypeDTO;
+import com.icu.mybill.dto.accounttype.CreateParentAndChildrenAccountTypeDTO;
 import com.icu.mybill.dto.accounttype.UpdateAccountTypeDTO;
 import com.icu.mybill.dto.accounttype.UpdateAccountTypeSortDTO;
 import com.icu.mybill.enums.ResultCode;
@@ -21,6 +22,7 @@ import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -36,24 +38,47 @@ public class AccountTypeController {
     private AccountTypeService accountTypeService;
 
     /**
-     * 创建账户类型
+     * 创建账户类型（一级和二级）
      *
-     * @param createAccountTypeDTO
+     * @param createParentAndChildrenAccountTypeDTO
      * @return
      */
-    @PostMapping("create")
+    @PostMapping("createParentAndChildren")
     // 接口名和接口描述
-    @Operation(summary = "创建账户类型", description = "创建账户类型，接收一个账户类型对象")
-    public Result<AccountTypeVO> create(
+    @Operation(summary = "创建账户类型（一级和二级）", description = "创建账户类型（一级和二级）")
+    public Result<AccountTypeVO> createParentAndChildren(
             // 接口参数描述
-            @Parameter(description = "要创建的账户类型对象", required = true)
-            @RequestBody @Validated CreateAccountTypeDTO createAccountTypeDTO
+            @Parameter(description = "要创建的账户类型对象，需要包含children属性", required = true)
+            @RequestBody @Validated CreateParentAndChildrenAccountTypeDTO createParentAndChildrenAccountTypeDTO
     ) {
-        AccountType AccountType = BeanUtil.copyProperties(createAccountTypeDTO, AccountType.class);
+        AccountType parent = BeanUtil.copyProperties(createParentAndChildrenAccountTypeDTO, AccountType.class);
+        List<AccountType> children = BeanUtil.copyToList(createParentAndChildrenAccountTypeDTO.getChildren(), AccountType.class);
 
-        accountTypeService.saveAccountType(AccountType);
+        accountTypeService.saveParentAndChildren(parent, children);
 
-        return Result.ok(BeanUtil.copyProperties(AccountType, AccountTypeVO.class));
+        AccountTypeVO parentVo = BeanUtil.copyProperties(parent, AccountTypeVO.class);
+        parentVo.setChildren(BeanUtil.copyToList(children, AccountTypeVO.class));
+
+        return Result.ok(BeanUtil.copyProperties(parentVo, AccountTypeVO.class));
+    }
+
+    /**
+     * 创建二级账户类型
+     *
+     * @param createChildrenAccountTypeDTO
+     * @return
+     */
+    @PostMapping("createChildren")
+    // 接口名和接口描述
+    @Operation(summary = "创建二级账户类型", description = "创建二级账户类型，接收一个账户类型对象，必须包含parentId")
+    public Result<AccountTypeVO> createChildren(
+            // 接口参数描述
+            @Parameter(description = "要创建的二级账户类型对象", required = true)
+            @RequestBody @Validated CreateChildrenAccountTypeDTO createChildrenAccountTypeDTO
+    ) {
+        AccountType accountType = BeanUtil.copyProperties(createChildrenAccountTypeDTO, AccountType.class);
+        accountTypeService.saveChildren(accountType);
+        return Result.ok(BeanUtil.copyProperties(accountType, AccountTypeVO.class));
     }
 
     /**
@@ -101,15 +126,15 @@ public class AccountTypeController {
     /**
      * 删除账户类型
      *
-     * @param accountTypeId
+     * @param id
      * @return
      */
     @DeleteMapping("delete")
     @Operation(summary = "删除账户类型", description = "删除账户类型")
     public Result<Boolean> delete(
-            @Parameter(description = "账户类型id", required = true) @RequestParam("id") Long accountTypeId
+            @Parameter(description = "账户类型id", required = true) @RequestParam("id") Long id
     ) {
-        boolean result = accountTypeService.deleteById(accountTypeId);
+        boolean result = accountTypeService.deleteById(id);
         return Result.ok(result);
     }
 
@@ -121,7 +146,7 @@ public class AccountTypeController {
             @RequestBody @Valid List<UpdateAccountTypeSortDTO> list
     ) {
         if (list.isEmpty()) {
-            return Result.fail(ResultCode.PARAMETER_FAIL.getCode(), "数据列表不能为空");
+            return Result.fail(ResultCode.UPDATE_SORT_LIST_EMPTY_ERROR);
         }
 
         Boolean result = accountTypeService.updateSort(list);
