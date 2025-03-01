@@ -40,6 +40,7 @@ public enum ResultCode {
     NOT_QUERY_NEED_OPERATE_DATA_ERROR(5106,"未查询到需要操作的数据"),
 
     UPDATE_REQUIRE_ONE_FIELD_ERROR(5120,"至少更新一个字段"),
+    UPDATE_SORT_LIST_EMPTY_ERROR(5121,"排序列表为空"),
 
 
 
@@ -64,6 +65,8 @@ public enum ResultCode {
     // 10500~10599：项目类型
 
     // 10600~10699：账单分类
+    PARENT_BILL_CATEGORY_NOT_EXIST(10200,"父账单分类不存在"),
+    PARENT_BILL_CATEGORY_REQUIRE_TOP_LEVEL(10201,"父账单分类必须是顶级"),
 
     // 10700~10799：账单
 
@@ -72,6 +75,7 @@ public enum ResultCode {
     // 10900~10999：模版
 
     // 11000~11099：其他
+    // CREATE_CHILDREN_EMPTY_ERROR(11000,"创建的子节点不能为空");
 
     ;
 

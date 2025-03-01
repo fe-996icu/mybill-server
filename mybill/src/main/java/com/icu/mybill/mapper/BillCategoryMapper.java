@@ -1,7 +1,10 @@
 package com.icu.mybill.mapper;
 
-import com.icu.mybill.pojo.BillCategory;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.icu.mybill.dto.billcategory.UpdateBillCategorySortDTO;
+import com.icu.mybill.pojo.BillCategory;
+
+import java.util.List;
 
 /**
 * @author zhangjianzhong
@@ -10,7 +13,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 * @Entity com.icu.mybill.pojo.BillCategory
 */
 public interface BillCategoryMapper extends BaseMapper<BillCategory> {
-
+    boolean updateSort(Long userId, List<UpdateBillCategorySortDTO> list);
 }
 
 
