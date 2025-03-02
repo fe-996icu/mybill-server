@@ -2,14 +2,13 @@ package com.icu.mybill.controller;
 
 import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.icu.mybill.common.Result;
 import com.icu.mybill.dto.PageDTO;
 import com.icu.mybill.dto.accountbook.CreateAccountBookDTO;
 import com.icu.mybill.dto.accountbook.UpdateAccountBookDTO;
-import com.icu.mybill.dto.accountbook.UpdateAccountBookSortDTO;
+import com.icu.mybill.dto.common.UpdateSortDTO;
 import com.icu.mybill.enums.ResultCode;
 import com.icu.mybill.pojo.AccountBook;
 import com.icu.mybill.query.BasePageQuery;
@@ -20,9 +19,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotNull;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -53,9 +50,8 @@ public class AccountBookController {
             @RequestBody @Validated CreateAccountBookDTO createAccountBookDTO
     ) {
         AccountBook accountBook = BeanUtil.copyProperties(createAccountBookDTO, AccountBook.class);
-        accountBook.setUserId(ThreadLocalHelper.get().getId());
 
-        accountBookService.save(accountBook);
+        accountBookService.saveOne(accountBook);
 
         return Result.ok(BeanUtil.copyProperties(accountBook, AccountBookVO.class));
     }
@@ -70,7 +66,7 @@ public class AccountBookController {
     public Result<List<AccountBookVO>> list() {
         LambdaQueryWrapper<AccountBook> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(AccountBook::getUserId, ThreadLocalHelper.get().getId());
-        queryWrapper.orderByDesc(AccountBook::getSort, AccountBook::getCreateTime);
+        queryWrapper.orderByAsc(AccountBook::getSort, AccountBook::getCreateTime);
 
         List<AccountBook> list = this.accountBookService.list(queryWrapper);
         List<AccountBookVO> accountBookVOS = BeanUtil.copyToList(list, AccountBookVO.class);
@@ -129,19 +125,12 @@ public class AccountBookController {
             @Parameter(description = "要更新的账本信息", required = true) @RequestBody @Validated UpdateAccountBookDTO updateAccountBookDTO
     ) {
         // 账本名称和账本图标不能都为空
-        if (StringUtils.isAllEmpty(updateAccountBookDTO.getName(), updateAccountBookDTO.getIcon())){
-            return Result.fail(ResultCode.PARAMETER_FAIL.getCode(), "账本名称和账本图标不能都为空");
-        }
+        // if (StringUtils.isAllEmpty(updateAccountBookDTO.getName(), updateAccountBookDTO.getIcon())){
+        //     return Result.fail(ResultCode.UPDATE_REQUIRE_ONE_FIELD_ERROR);
+        // }
 
-        Long userId = ThreadLocalHelper.get().getId();
+        boolean result = accountBookService.updateData(updateAccountBookDTO);
 
-        LambdaUpdateWrapper<AccountBook> updateWrapper = Wrappers.lambdaUpdate(AccountBook.class)
-                .eq(AccountBook::getId, updateAccountBookDTO.getId())
-                .eq(AccountBook::getUserId, userId)
-                .set(StringUtils.isNotBlank(updateAccountBookDTO.getName()), AccountBook::getName, updateAccountBookDTO.getName())
-                .set(StringUtils.isNotBlank(updateAccountBookDTO.getIcon()), AccountBook::getIcon, updateAccountBookDTO.getIcon());
-
-        boolean result = accountBookService.update(updateWrapper);
         return Result.ok(result);
     }
 
@@ -156,11 +145,8 @@ public class AccountBookController {
     public Result<Boolean> delete(
             @Parameter(description = "账本id", required = true) @RequestParam Long id
     ) {
-        boolean result = accountBookService.remove(
-                Wrappers.lambdaQuery(AccountBook.class)
-                        .eq(AccountBook::getId, id)
-                        .eq(AccountBook::getUserId, ThreadLocalHelper.get().getId())
-        );
+        boolean result = accountBookService.deleteById(id);
+
         return Result.ok(result);
     }
 
@@ -169,13 +155,14 @@ public class AccountBookController {
     public Result<Boolean> updateSort(
             @Parameter(description = "更新账本排序", required = true)
             // 使用@Valid校验List中的DTO对象字段，因为@Validation只会校验参数类型的DTO字段，不会校验List中的
-            @RequestBody @Valid List<UpdateAccountBookSortDTO> list
+            @RequestBody @Valid List<UpdateSortDTO> list
     ) {
         if (list.isEmpty()) {
-            return Result.fail(ResultCode.PARAMETER_FAIL.getCode(), "数据列表不能为空");
+            return Result.fail(ResultCode.UPDATE_SORT_LIST_EMPTY_ERROR);
         }
 
-        Boolean result = accountBookService.updateSort(list);
+        boolean result = accountBookService.updateSort(list);
+
         return Result.ok(result);
     }
 }
