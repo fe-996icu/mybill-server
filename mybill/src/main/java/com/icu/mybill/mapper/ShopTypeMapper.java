@@ -1,7 +1,11 @@
 package com.icu.mybill.mapper;
 
+import com.icu.mybill.dto.common.UpdateSortDTO;
 import com.icu.mybill.pojo.ShopType;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 /**
 * @author zhangjianzhong
@@ -10,7 +14,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 * @Entity com.icu.mybill.pojo.ShopType
 */
 public interface ShopTypeMapper extends BaseMapper<ShopType> {
-
+    boolean updateSort(@Param("userId") long userId, @Param("list") List<UpdateSortDTO> list);
 }
 
 

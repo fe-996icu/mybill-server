@@ -1,7 +1,11 @@
 package com.icu.mybill.service;
 
-import com.icu.mybill.pojo.ShopType;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.icu.mybill.dto.common.UpdateSortDTO;
+import com.icu.mybill.dto.shoptype.UpdateShopTypeDTO;
+import com.icu.mybill.pojo.ShopType;
+
+import java.util.List;
 
 /**
 * @author zhangjianzhong
@@ -10,4 +14,16 @@ import com.baomidou.mybatisplus.extension.service.IService;
 */
 public interface ShopTypeService extends IService<ShopType> {
 
+    /**
+     * 更新排序
+     * @param list
+     * @return
+     */
+    boolean updateSort(List<UpdateSortDTO> list);
+
+    boolean saveOne(ShopType shopType);
+
+    boolean updateData(UpdateShopTypeDTO updateShopTypeDTO);
+
+    boolean deleteById(long id);
 }
