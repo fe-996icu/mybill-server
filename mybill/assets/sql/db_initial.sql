@@ -127,7 +127,9 @@ create table bill (
 -- 附件表
 drop table if exists attachment;
 create table attachment (
-    id bigint primary key auto_increment comment '附件id',
+    id bigint primary key auto_increment comment '数据id',
+    file_id varchar(50) not null comment '文件id',
+    file_name varchar(100) not null comment '文件名称',
     file_path varchar(500) not null comment '文件路径',
     sort tinyint null comment '排序',
     user_id bigint not null comment '所属用户id（逻辑外键）',
@@ -152,6 +154,7 @@ create table template (
     user_id bigint not null comment '所属用户id（逻辑外键）',
     account_book_id bigint not null comment '账本id（逻辑外键）',
     notes varchar(1000) null comment '备注',
+    sort tinyint null comment '排序',
     create_time datetime not null default now() comment '创建时间',
     last_update_time datetime on update current_timestamp comment '最后更新时间'
 ) engine=InnoDB default charset=utf8mb4 comment='模板表';
