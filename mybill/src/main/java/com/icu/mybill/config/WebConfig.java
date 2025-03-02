@@ -1,6 +1,7 @@
-package com.icu.mybill.interceptors;
+package com.icu.mybill.config;
 
 import com.icu.mybill.converter.StringToBillTypeConverter;
+import com.icu.mybill.interceptors.TokenInterceptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
