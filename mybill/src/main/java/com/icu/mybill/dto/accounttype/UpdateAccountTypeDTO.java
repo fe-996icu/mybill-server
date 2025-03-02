@@ -1,10 +1,12 @@
 package com.icu.mybill.dto.accounttype;
 
+import com.icu.mybill.annotation.AtLeastOneNotNull;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 @Data
+@AtLeastOneNotNull
 @Schema(description = "更新账户类型请求参数")
 public class UpdateAccountTypeDTO {
     @Schema(description = "账户类型id", requiredMode = Schema.RequiredMode.REQUIRED)

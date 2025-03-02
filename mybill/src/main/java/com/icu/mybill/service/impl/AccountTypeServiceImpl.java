@@ -3,7 +3,7 @@ package com.icu.mybill.service.impl;
 import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.icu.mybill.dto.accounttype.UpdateAccountTypeDTO;
-import com.icu.mybill.dto.accounttype.UpdateAccountTypeSortDTO;
+import com.icu.mybill.dto.common.UpdateSortDTO;
 import com.icu.mybill.enums.ResultCode;
 import com.icu.mybill.exception.common.FrontendErrorPromptException;
 import com.icu.mybill.mapper.AccountTypeMapper;
@@ -29,12 +29,12 @@ public class AccountTypeServiceImpl extends ServiceImpl<AccountTypeMapper, Accou
     private AccountTypeMapper accountTypeMapper;
 
     @Override
-    public boolean updateSort(List<UpdateAccountTypeSortDTO> list) {
+    public boolean updateSort(List<UpdateSortDTO> list) {
         Long userId = ThreadLocalHelper.get().getId();
 
         List<AccountType> queryList = this.lambdaQuery()
                 // .eq(AccountType::getUserId, userId)
-                .in(AccountType::getId, list.stream().map(UpdateAccountTypeSortDTO::getId).toList())
+                .in(AccountType::getId, list.stream().map(UpdateSortDTO::getId).toList())
                 .list();
 
         // 查询到的数据量与查询的id数量不一致，说明有id不存在，抛出异常
@@ -57,11 +57,12 @@ public class AccountTypeServiceImpl extends ServiceImpl<AccountTypeMapper, Accou
     public boolean saveParentAndChildren(AccountType parent, List<AccountType> children) {
         Long userId = ThreadLocalHelper.get().getId();
 
-        // 保存父级账户类型
+        // 保存一级账户类型
         parent.setUserId(userId);
         parent.setParentId(null);
         this.save(parent);
 
+        // 设置二级账户类型初始值
         for (int i = 0; i < children.size(); i++) {
             AccountType item = children.get(i);
             item.setParentId(parent.getId());
@@ -76,7 +77,7 @@ public class AccountTypeServiceImpl extends ServiceImpl<AccountTypeMapper, Accou
     public boolean saveChildren(AccountType accountType) {
         Long userId = ThreadLocalHelper.get().getId();
 
-        // 没有查询到父账户类型
+        // 必须有一级账户类型字段值
         if (accountType.getParentId() == null) {
             throw new FrontendErrorPromptException(ResultCode.PARENT_BILL_CATEGORY_NOT_EXIST);
         }
@@ -120,9 +121,9 @@ public class AccountTypeServiceImpl extends ServiceImpl<AccountTypeMapper, Accou
             throw new FrontendErrorPromptException(ResultCode.UPDATE_DATA_NOT_SELF_ERROR);
         }
 
-        AccountType updateAccountType = BeanUtil.copyProperties(updateAccountTypeDTO, AccountType.class);
+        BeanUtil.copyProperties(accountType, updateAccountTypeDTO);
 
-        return this.updateById(updateAccountType);
+        return this.updateById(accountType);
     }
 
     @Override

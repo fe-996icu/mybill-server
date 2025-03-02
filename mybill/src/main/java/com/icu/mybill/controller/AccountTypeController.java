@@ -7,9 +7,8 @@ import com.icu.mybill.common.Result;
 import com.icu.mybill.dto.accounttype.CreateChildrenAccountTypeDTO;
 import com.icu.mybill.dto.accounttype.CreateParentAndChildrenAccountTypeDTO;
 import com.icu.mybill.dto.accounttype.UpdateAccountTypeDTO;
-import com.icu.mybill.dto.accounttype.UpdateAccountTypeSortDTO;
+import com.icu.mybill.dto.common.UpdateSortDTO;
 import com.icu.mybill.enums.ResultCode;
-import com.icu.mybill.exception.common.FrontendErrorPromptException;
 import com.icu.mybill.pojo.AccountType;
 import com.icu.mybill.service.AccountTypeService;
 import com.icu.mybill.util.ThreadLocalHelper;
@@ -20,9 +19,7 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -90,6 +87,7 @@ public class AccountTypeController {
     @Operation(summary = "获取账户类型全部列表", description = "获取账户类型全部列表")
     public Result<List<AccountTypeVO>> list() {
         List<AccountType> list = this.accountTypeService.list(
+                // 不需要排序，因为转成tree结构数据时会排序
                 Wrappers.lambdaQuery(AccountType.class)
                         .eq(AccountType::getUserId, ThreadLocalHelper.get().getId())
         );
@@ -114,9 +112,9 @@ public class AccountTypeController {
             @Parameter(description = "要更新的账户类型信息", required = true) @RequestBody @Validated UpdateAccountTypeDTO updateAccountTypeDTO
     ) {
         // 账户类型名称和账户类型图标不能都为空
-        if (StringUtils.isAllEmpty(updateAccountTypeDTO.getName(), updateAccountTypeDTO.getIcon())){
-            throw new FrontendErrorPromptException(ResultCode.UPDATE_REQUIRE_ONE_FIELD_ERROR);
-        }
+        // if (StringUtils.isAllEmpty(updateAccountTypeDTO.getName(), updateAccountTypeDTO.getIcon())){
+        //     return Result.fail(ResultCode.UPDATE_REQUIRE_ONE_FIELD_ERROR);
+        // }
 
         boolean result = accountTypeService.updateData(updateAccountTypeDTO);
 
@@ -135,6 +133,7 @@ public class AccountTypeController {
             @Parameter(description = "账户类型id", required = true) @RequestParam("id") Long id
     ) {
         boolean result = accountTypeService.deleteById(id);
+
         return Result.ok(result);
     }
 
@@ -143,13 +142,14 @@ public class AccountTypeController {
     public Result<Boolean> updateSort(
             @Parameter(description = "更新账户类型排序", required = true)
             // 使用@Valid校验List中的DTO对象字段，因为@Validation只会校验参数类型的DTO字段，不会校验List中的
-            @RequestBody @Valid List<UpdateAccountTypeSortDTO> list
+            @RequestBody @Valid List<UpdateSortDTO> list
     ) {
         if (list.isEmpty()) {
             return Result.fail(ResultCode.UPDATE_SORT_LIST_EMPTY_ERROR);
         }
 
         Boolean result = accountTypeService.updateSort(list);
+
         return Result.ok(result);
     }
 }

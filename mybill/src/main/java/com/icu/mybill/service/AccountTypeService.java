@@ -1,7 +1,7 @@
 package com.icu.mybill.service;
 
 import com.icu.mybill.dto.accounttype.UpdateAccountTypeDTO;
-import com.icu.mybill.dto.accounttype.UpdateAccountTypeSortDTO;
+import com.icu.mybill.dto.common.UpdateSortDTO;
 import com.icu.mybill.pojo.AccountType;
 import com.baomidou.mybatisplus.extension.service.IService;
 
@@ -14,7 +14,7 @@ import java.util.List;
 */
 public interface AccountTypeService extends IService<AccountType> {
 
-    boolean updateSort(List<UpdateAccountTypeSortDTO> list);
+    boolean updateSort(List<UpdateSortDTO> list);
 
     boolean saveParentAndChildren(AccountType parent, List<AccountType> children);
 
