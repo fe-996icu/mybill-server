@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.jdbc.BadSqlGrammarException;
 import org.springframework.validation.FieldError;
+import org.springframework.validation.ObjectError;
 import org.springframework.validation.method.ParameterValidationResult;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -105,7 +106,12 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public Result<?> handleValidationException(MethodArgumentNotValidException e) {
-        String errorMessage = e.getBindingResult().getFieldError().getDefaultMessage();
+        // String errorMessage = e.getBindingResult().getFieldError().getDefaultMessage();
+
+        // 取出第一个错误信息
+        ObjectError objectError = e.getBindingResult().getAllErrors().stream().findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("无效的值2222222222222: ", e));
+        String errorMessage = objectError.getDefaultMessage();
         log.warn("[MethodArgumentNotValidException]", e);
         return Result.build(null, ResultCode.PARAMETER_FAIL.getCode(), errorMessage);
     }
