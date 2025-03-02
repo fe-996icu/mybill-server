@@ -79,7 +79,7 @@ public class AccountTypeServiceImpl extends ServiceImpl<AccountTypeMapper, Accou
 
         // 必须有一级账户类型字段值
         if (accountType.getParentId() == null) {
-            throw new FrontendErrorPromptException(ResultCode.PARENT_BILL_CATEGORY_NOT_EXIST);
+            throw new FrontendErrorPromptException(ResultCode.ACCOUNT_TYPE_PARENT_NOT_EXIST);
         }
 
         // 查询父级账户类型
@@ -89,7 +89,7 @@ public class AccountTypeServiceImpl extends ServiceImpl<AccountTypeMapper, Accou
 
         // 没有查询到父账户类型
         if (parent == null) {
-            throw new FrontendErrorPromptException(ResultCode.PARENT_BILL_CATEGORY_NOT_EXIST);
+            throw new FrontendErrorPromptException(ResultCode.ACCOUNT_TYPE_PARENT_NOT_EXIST);
         }
 
         // 操作的不是自己的数据
@@ -99,7 +99,7 @@ public class AccountTypeServiceImpl extends ServiceImpl<AccountTypeMapper, Accou
 
         // 父级账户类型必须是顶级
         if (parent.getParentId() != null){
-            throw new FrontendErrorPromptException(ResultCode.PARENT_BILL_CATEGORY_REQUIRE_TOP_LEVEL);
+            throw new FrontendErrorPromptException(ResultCode.ACCOUNT_TYPE_REFERENCE_REQUIRED_TOP_LEVEL);
         }
 
         accountType.setUserId(userId);

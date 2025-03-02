@@ -82,7 +82,7 @@ public class BillCategoryServiceImpl extends ServiceImpl<BillCategoryMapper, Bil
 
         // 创建子分类时，parentId必须存在
         if (billCategory.getParentId() == null) {
-            throw new FrontendErrorPromptException(ResultCode.PARENT_BILL_CATEGORY_NOT_EXIST);
+            throw new FrontendErrorPromptException(ResultCode.BILL_CATEGORY_PARENT_NOT_EXISTS);
         }
 
         // 查询父级账户类型
@@ -92,7 +92,7 @@ public class BillCategoryServiceImpl extends ServiceImpl<BillCategoryMapper, Bil
 
         // 没有查询到父账户类型
         if (parent == null) {
-            throw new FrontendErrorPromptException(ResultCode.PARENT_BILL_CATEGORY_NOT_EXIST);
+            throw new FrontendErrorPromptException(ResultCode.BILL_CATEGORY_PARENT_NOT_EXISTS);
         }
 
         // 操作的不是自己的数据
@@ -102,7 +102,7 @@ public class BillCategoryServiceImpl extends ServiceImpl<BillCategoryMapper, Bil
 
         // 父级账户类型必须是顶级
         if (parent.getParentId() != null){
-            throw new FrontendErrorPromptException(ResultCode.PARENT_BILL_CATEGORY_REQUIRE_TOP_LEVEL);
+            throw new FrontendErrorPromptException(ResultCode.BILL_CATEGORY_REFERENCE_REQUIRED_TOP_LEVEL);
         }
 
         billCategory.setUserId(userId);
