@@ -1,11 +1,13 @@
 package com.icu.mybill.dto.billcategory;
 
+import com.icu.mybill.annotation.AtLeastOneNotNull;
 import com.icu.mybill.enums.BillType;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 @Data
+@AtLeastOneNotNull
 @Schema(description = "更新账单分类请求参数")
 public class UpdateBillCategoryDTO {
     @Schema(description = "账单分类id", requiredMode = Schema.RequiredMode.REQUIRED)
@@ -15,9 +17,6 @@ public class UpdateBillCategoryDTO {
 
     @Schema(description = "账单分类名称")
     private String name;
-
-    @Schema(description = "账单类型，1为支出，2为收入")
-    private BillType type;
 
     @Schema(description = "账本图标")
     private String icon;

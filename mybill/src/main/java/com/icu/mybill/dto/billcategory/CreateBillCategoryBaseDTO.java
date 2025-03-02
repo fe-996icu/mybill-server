@@ -17,10 +17,6 @@ public class CreateBillCategoryBaseDTO {
     @Schema(description = "账单分类名称")
     private String name;
 
-    @NotNull(message = "账单类型不能为空")
-    @Schema(description = "账单类型，1为支出，2为收入")
-    private BillType type;
-
     @Schema(description = "账单分类图标")
     private String icon;
 

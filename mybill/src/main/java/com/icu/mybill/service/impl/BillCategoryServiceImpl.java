@@ -3,7 +3,7 @@ package com.icu.mybill.service.impl;
 import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.icu.mybill.dto.billcategory.UpdateBillCategoryDTO;
-import com.icu.mybill.dto.billcategory.UpdateBillCategorySortDTO;
+import com.icu.mybill.dto.common.UpdateSortDTO;
 import com.icu.mybill.enums.ResultCode;
 import com.icu.mybill.exception.common.FrontendErrorPromptException;
 import com.icu.mybill.mapper.BillCategoryMapper;
@@ -29,12 +29,12 @@ public class BillCategoryServiceImpl extends ServiceImpl<BillCategoryMapper, Bil
     private BillCategoryMapper billCategoryMapper;
 
     @Override
-    public boolean updateSort(List<UpdateBillCategorySortDTO> list) {
+    public boolean updateSort(List<UpdateSortDTO> list) {
         Long userId = ThreadLocalHelper.get().getId();
 
         List<BillCategory> queryList = this.lambdaQuery()
                 // .eq(BillCategory::getUserId, userId)
-                .in(BillCategory::getId, list.stream().map(UpdateBillCategorySortDTO::getId).toList())
+                .in(BillCategory::getId, list.stream().map(UpdateSortDTO::getId).toList())
                 .list();
 
         // 查询到的数据量与查询的id数量不一致，说明有id不存在，抛出异常
@@ -63,9 +63,11 @@ public class BillCategoryServiceImpl extends ServiceImpl<BillCategoryMapper, Bil
         parent.setParentId(null);
         this.save(parent);
 
+        // 设置二级账户类型初始值
         for (int i = 0; i < children.size(); i++) {
             BillCategory item = children.get(i);
             item.setParentId(parent.getId());
+            item.setType(parent.getType());
             item.setUserId(userId);
             item.setSort(i + 1);
         }
@@ -78,7 +80,7 @@ public class BillCategoryServiceImpl extends ServiceImpl<BillCategoryMapper, Bil
     public boolean saveChildren(BillCategory billCategory) {
         Long userId = ThreadLocalHelper.get().getId();
 
-        // 没有查询到父账户类型
+        // 创建子分类时，parentId必须存在
         if (billCategory.getParentId() == null) {
             throw new FrontendErrorPromptException(ResultCode.PARENT_BILL_CATEGORY_NOT_EXIST);
         }
@@ -104,6 +106,7 @@ public class BillCategoryServiceImpl extends ServiceImpl<BillCategoryMapper, Bil
         }
 
         billCategory.setUserId(userId);
+        billCategory.setType(parent.getType());
 
         return this.save(billCategory);
     }

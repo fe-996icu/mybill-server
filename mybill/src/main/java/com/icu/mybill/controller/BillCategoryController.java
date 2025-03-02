@@ -4,18 +4,17 @@ import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.lang.tree.Tree;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.icu.mybill.common.Result;
-import com.icu.mybill.dto.billcategory.CreateParentAndChildrenBillCategoryDTO;
 import com.icu.mybill.dto.billcategory.CreateChildrenBillCategoryDTO;
+import com.icu.mybill.dto.billcategory.CreateParentAndChildrenBillCategoryDTO;
 import com.icu.mybill.dto.billcategory.UpdateBillCategoryDTO;
-import com.icu.mybill.dto.billcategory.UpdateBillCategorySortDTO;
+import com.icu.mybill.dto.common.UpdateSortDTO;
 import com.icu.mybill.enums.BillType;
 import com.icu.mybill.enums.ResultCode;
-import com.icu.mybill.exception.common.FrontendErrorPromptException;
 import com.icu.mybill.pojo.BillCategory;
 import com.icu.mybill.service.BillCategoryService;
 import com.icu.mybill.util.ThreadLocalHelper;
 import com.icu.mybill.util.TreeDataHelper;
-import com.icu.mybill.vo.billcategory.accounttype.BillCategoryVO;
+import com.icu.mybill.vo.billcategory.BillCategoryVO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -24,7 +23,6 @@ import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -70,7 +68,6 @@ public class BillCategoryController {
      * @param createChildrenBillCategoryDTO
      * @return
      */
-    @Transactional
     @PostMapping("createChildren")
     // 接口名和接口描述
     @Operation(summary = "创建二级账单分类", description = "创建二级账单分类，接收一个账单分类对象，必须包含parentId")
@@ -80,7 +77,9 @@ public class BillCategoryController {
             @RequestBody @Validated CreateChildrenBillCategoryDTO createChildrenBillCategoryDTO
     ) {
         BillCategory billCategory = BeanUtil.copyProperties(createChildrenBillCategoryDTO, BillCategory.class);
+
         billCategoryService.saveChildren(billCategory);
+
         return Result.ok(BeanUtil.copyProperties(billCategory, BillCategoryVO.class));
     }
 
@@ -97,6 +96,7 @@ public class BillCategoryController {
             BillType type
     ) {
         List<BillCategory> list = this.billCategoryService.list(
+                // 不需要排序，因为转成tree结构数据时会排序
                 Wrappers.lambdaQuery(BillCategory.class)
                         .eq(BillCategory::getUserId, ThreadLocalHelper.get().getId())
                         .eq(type!=null, BillCategory::getType, type)
@@ -122,9 +122,9 @@ public class BillCategoryController {
             @Parameter(description = "要更新的账单分类信息", required = true) @RequestBody @Validated UpdateBillCategoryDTO updateBillCategoryDTO
     ) {
         // 账单分类名称和账单分类图标不能都为空
-        if (StringUtils.isAllEmpty(updateBillCategoryDTO.getName(), updateBillCategoryDTO.getIcon())){
-            throw new FrontendErrorPromptException(ResultCode.UPDATE_REQUIRE_ONE_FIELD_ERROR);
-        }
+        // if (StringUtils.isAllEmpty(updateBillCategoryDTO.getName(), updateBillCategoryDTO.getIcon())){
+        //     return Result.fail(ResultCode.UPDATE_REQUIRE_ONE_FIELD_ERROR);
+        // }
 
         boolean result = billCategoryService.updateData(updateBillCategoryDTO);
 
@@ -143,6 +143,7 @@ public class BillCategoryController {
             @Parameter(description = "账单分类id", required = true) @RequestParam("id") Long id
     ) {
         boolean result = billCategoryService.deleteById(id);
+
         return Result.ok(result);
     }
 
@@ -151,13 +152,14 @@ public class BillCategoryController {
     public Result<Boolean> updateSort(
             @Parameter(description = "更新账单分类排序", required = true)
             // 使用@Valid校验List中的DTO对象字段，因为@Validation只会校验参数类型的DTO字段，不会校验List中的
-            @RequestBody @Valid List<UpdateBillCategorySortDTO> list
+            @RequestBody @Valid List<UpdateSortDTO> list
     ) {
         if (list.isEmpty()) {
             return Result.fail(ResultCode.UPDATE_SORT_LIST_EMPTY_ERROR);
         }
 
-        Boolean result = billCategoryService.updateSort(list);
+        boolean result = billCategoryService.updateSort(list);
+
         return Result.ok(result);
     }
 }

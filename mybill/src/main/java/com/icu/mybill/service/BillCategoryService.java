@@ -2,7 +2,7 @@ package com.icu.mybill.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.icu.mybill.dto.billcategory.UpdateBillCategoryDTO;
-import com.icu.mybill.dto.billcategory.UpdateBillCategorySortDTO;
+import com.icu.mybill.dto.common.UpdateSortDTO;
 import com.icu.mybill.pojo.BillCategory;
 
 import java.util.List;
@@ -14,7 +14,7 @@ import java.util.List;
  */
 public interface BillCategoryService extends IService<BillCategory> {
 
-    boolean updateSort(List<UpdateBillCategorySortDTO> list);
+    boolean updateSort(List<UpdateSortDTO> list);
 
     boolean saveParentAndChildren(BillCategory parent, List<BillCategory> children);
 

@@ -1,4 +1,4 @@
-package com.icu.mybill.vo.billcategory.accounttype;
+package com.icu.mybill.vo.billcategory;
 
 import com.icu.mybill.enums.BillType;
 import io.swagger.v3.oas.annotations.media.Schema;
