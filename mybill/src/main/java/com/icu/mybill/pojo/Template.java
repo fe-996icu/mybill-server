@@ -80,6 +80,11 @@ public class Template {
     private String notes;
 
     /**
+     * 排序字段
+     */
+    private Integer sort;
+
+    /**
      * 创建时间
      */
     private LocalDateTime createTime;

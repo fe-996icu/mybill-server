@@ -148,7 +148,7 @@ create table template (
     bill_category_id bigint not null comment '账单分类id（逻辑外键）',
     account_type_id bigint not null comment '账户类型id（逻辑外键）',
     amount decimal(10,2) not null comment '金额',
-    member_type_id bigint not null comment '成员类型id（逻辑外键）',
+    member_type_id bigint null comment '成员类型id（逻辑外键）',
     shop_type_id bigint null comment '商家类型id（逻辑外键）',
     project_type_id bigint null comment '项目类型id（逻辑外键）',
     user_id bigint not null comment '所属用户id（逻辑外键）',

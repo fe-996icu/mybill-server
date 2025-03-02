@@ -26,4 +26,19 @@
         member_type_id,shop_type_id,project_type_id,user_id,account_book_id,
         notes,create_time,last_update_time
     </sql>
+
+    <update id="updateSort">
+        update template
+            set
+                sort = case id
+                    <foreach collection="list" item="item" separator=" ">
+                        when #{item.id} then #{item.sort}
+                    </foreach>
+                end
+            where user_id = #{userId} and id in
+                <foreach collection="list" item="item" separator="," open ="(" close=")">
+                    #{item.id}
+                </foreach>
+        ;
+    </update>
 </mapper>

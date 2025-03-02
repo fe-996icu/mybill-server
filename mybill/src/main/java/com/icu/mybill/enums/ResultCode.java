@@ -34,9 +34,8 @@ public enum ResultCode {
     UPDATE_DATA_NOT_SELF_ERROR(5103,"修改的数据不是本人数据"),
     // 查询的数据不是自己的
     QUERY_DATA_NOT_SELF_ERROR(5104,"查询的数据不是本人数据"),
-    // 使用的父级数据不是自己的
-    REFERENCE_PARENT_DATA_NOT_SELF_ERROR(5105,"使用的父级数据不是本人数据"),
-    // 增删改时未查询到需要操作的数据
+    REFERENCE_PARENT_DATA_NOT_SELF_ERROR(5105,"引用的父级数据不是本人数据"),
+    REFERENCE_CHILDREN_DATA_NOT_SELF_ERROR(5105,"引用的二级数据不是本人数据"),
     NOT_QUERY_NEED_OPERATE_DATA_ERROR(5106,"未查询到需要操作的数据"),
 
     UPDATE_REQUIRE_ONE_FIELD_ERROR(5120,"至少更新一个字段"),
@@ -54,31 +53,46 @@ public enum ResultCode {
     PHONE_CODE_ERROR(10007,"验证码错误"),
 
     // 10100~10199：账本
+    ACCOUNT_BOOK_NOT_EXISTS(10100,"账本不存在"),
+    ACCOUNT_BOOK_NOT_SELF_ERROR(10101,"账本不是本人数据"),
 
     // 10200~10299：账户类型
-    PARENT_ACCOUNT_TYPE_NOT_EXIST(10200,"父账户类型不存在"),
-    PARENT_ACCOUNT_TYPE_REQUIRE_TOP_LEVEL(10201,"父账户类型必须是顶级"),
+    ACCOUNT_TYPE_NOT_EXISTS(10200,"账户类型不存在"),
+    ACCOUNT_TYPE_PARENT_NOT_EXIST(10201,"一级账户类型不存在"),
+    ACCOUNT_TYPE_CHILDREN_DATA_NOT_EXISTS(10202,"二级账户类型不存在"),
+    ACCOUNT_TYPE_REQUIRED_TOP_LEVEL(10203,"账户类型必须是一级数据"),
+    ACCOUNT_TYPE_REQUIRED_SUB_LEVEL(10204,"账户类型必须是二级数据"),
+    ACCOUNT_TYPE_NOT_SELF_ERROR(10205,"账户类型不是本人数据"),
+
     // 10300~10399：商家类型
+    SHOP_TYPE_NOT_EXISTS(10300,"商家类型不存在"),
+    SHOP_TYPE_NOT_SELF_ERROR(10301,"商家类型不是本人数据"),
 
     // 10400~10499：成员类型
+    MEMBER_TYPE_NOT_EXISTS(10400,"成员类型不存在"),
+    MEMBER_TYPE_NOT_SELF_ERROR(10401,"成员类型不是本人数据"),
 
     // 10500~10599：项目类型
+    PROJECT_TYPE_NOT_EXISTS(10500,"项目类型不存在"),
+    PROJECT_TYPE_NOT_SELF_ERROR(10501,"项目类型不是本人数据"),
 
     // 10600~10699：账单分类
-    PARENT_BILL_CATEGORY_NOT_EXIST(10200,"父账单分类不存在"),
-    PARENT_BILL_CATEGORY_REQUIRE_TOP_LEVEL(10201,"父账单分类必须是顶级"),
+    BILL_CATEGORY_NOT_EXISTS(10200,"账单分类不存在"),
+    BILL_CATEGORY_PARENT_NOT_EXISTS(10201,"一级账单分类不存在"),
+    BILL_CATEGORY_CHILDREN_DATA_NOT_EXISTS(10202,"二级账单分类不存在"),
+    BILL_CATEGORY_REQUIRED_TOP_LEVEL(10203,"账单分类必须是一级数据"),
+    BILL_CATEGORY_REQUIRED_SUB_LEVEL(10204,"账单分类必须是二级数据"),
+    BILL_CATEGORY_NOT_SELF_ERROR(10205,"账单分类数是本人数据"),
 
     // 10700~10799：账单
 
-    // 10800~10899：分类
+    // 10800~10899：附件
 
     // 10900~10999：模版
 
     // 11000~11099：其他
     // CREATE_CHILDREN_EMPTY_ERROR(11000,"创建的子节点不能为空");
-
-    ;
-
+;
     @JsonValue
     private final Integer code;
     private final String message;
