@@ -2,6 +2,7 @@ package com.icu.mybill.enums;
 
 import com.baomidou.mybatisplus.annotation.EnumValue;
 import com.fasterxml.jackson.annotation.JsonValue;
+import com.icu.mybill.util.EnumUtils;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;
@@ -11,7 +12,7 @@ import lombok.Getter;
  */
 @Getter
 @AllArgsConstructor
-public enum UserStatus {
+public enum UserStatus implements EnumUtils.ValuedEnum {
     NORMAL(1, "正常"),
     LOCKED(0, "禁用");
 

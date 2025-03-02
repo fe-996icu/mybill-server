@@ -2,6 +2,7 @@ package com.icu.mybill.enums;
 
 import com.baomidou.mybatisplus.annotation.EnumValue;
 import com.fasterxml.jackson.annotation.JsonValue;
+import com.icu.mybill.util.EnumUtils;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -10,7 +11,7 @@ import lombok.Getter;
  */
 @Getter
 @AllArgsConstructor
-public enum AccountBookType {
+public enum AccountBookType implements EnumUtils.ValuedEnum {
     DEFAULT(1, "默认账本"),
     HOME(2, "家庭账本"),
     BUSINESS(3, "生意账本");

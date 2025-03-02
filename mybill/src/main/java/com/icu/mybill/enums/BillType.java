@@ -2,6 +2,7 @@ package com.icu.mybill.enums;
 
 import com.baomidou.mybatisplus.annotation.EnumValue;
 import com.fasterxml.jackson.annotation.JsonValue;
+import com.icu.mybill.util.EnumUtils;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -12,7 +13,7 @@ import java.util.Arrays;
  */
 @Getter
 @AllArgsConstructor
-public enum BillType {
+public enum BillType implements EnumUtils.ValuedEnum {
     EXPENSE(1, "支出"),
     INCOME(2, "收入");
 
@@ -23,20 +24,20 @@ public enum BillType {
 
 
     /** 通过数值查找枚举 */
-    public static BillType fromValue(Object value) {
-        if (value == null) {
-            return null;
-        }
-
-        try {
-            int intValue = Integer.parseInt(value.toString());
-            return Arrays.stream(BillType.values())
-                    .filter(type -> type.value.equals(intValue))
-                    .findFirst()
-                    // .orElse(null); // 或者抛出异常
-                    .orElseThrow(() -> new IllegalArgumentException("无效的值: " + intValue));
-        } catch (NumberFormatException e) {
-            return null;
-        }
-    }
+    // public static BillType fromValue(Object value) {
+    //     if (value == null) {
+    //         return null;
+    //     }
+    //
+    //     try {
+    //         int intValue = Integer.parseInt(value.toString());
+    //         return Arrays.stream(BillType.values())
+    //                 .filter(type -> type.value.equals(intValue))
+    //                 .findFirst()
+    //                 // .orElse(null); // 或者抛出异常
+    //                 .orElseThrow(() -> new IllegalArgumentException("无效的值: " + intValue));
+    //     } catch (NumberFormatException e) {
+    //         return null;
+    //     }
+    // }
 }

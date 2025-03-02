@@ -63,7 +63,7 @@ public class TokenHelper {
             tokenUserDTO.setUsername(claims.get("username").toString());
         if (claims.get("phone") != null)
             tokenUserDTO.setPhone(claims.get("phone").toString());
-        tokenUserDTO.setLoginType(LoginType.fromValue(Integer.parseInt(claims.get("loginType").toString())));
+        tokenUserDTO.setLoginType(EnumUtils.fromValue(claims.get("loginType").toString(), LoginType.class));
         tokenUserDTO.setLastLoginTime(LocalDateTime.parse(claims.get("lastLoginTime").toString()));
 
         return tokenUserDTO;
