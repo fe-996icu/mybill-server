@@ -53,7 +53,9 @@ com:
     mybill:
       # 默认手机验证码
       defaultPhoneCode: 6666
-      fileStoreDir: D:/files/
+      file-store-dir: D:/files/
+      # 一个账单的附件数量最多9个
+      one-bill-attach-max-size: 9
       token:
         # token 密钥 ： “需要一个长度超过256个字符的字符串秘钥” =>6ZyA6KaB5LiA5Liq6ZW/5bqm6LaF6L+HMjU25Liq5a2X56ym55qE5a2X56ym5Liy56eY6ZKl
         secret: 6ZyA6KaB5LiA5Liq6ZW/5bqm6LaF6L+HMjU25Liq5a2X56ym55qE5a2X56ym5Liy56eY6ZKl

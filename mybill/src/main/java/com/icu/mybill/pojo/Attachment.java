@@ -17,10 +17,20 @@ import lombok.Data;
 @Data
 public class Attachment {
     /**
-     * 附件id
+     * 数据id
      */
     @TableId(type = IdType.AUTO)
     private Long id;
+
+    /**
+     * 文件id
+     */
+    private String fileId;
+
+    /**
+     * 文件名
+     */
+    private String fileName;
 
     /**
      * 文件路径

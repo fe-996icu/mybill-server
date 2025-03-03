@@ -1,7 +1,11 @@
 package com.icu.mybill.mapper;
 
+import com.icu.mybill.dto.common.UpdateSortDTO;
 import com.icu.mybill.pojo.Attachment;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 /**
 * @author zhangjianzhong
@@ -10,6 +14,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 * @Entity com.icu.mybill.pojo.Attachment
 */
 public interface AttachmentMapper extends BaseMapper<Attachment> {
+    boolean updateSort(@Param("userId") long userId, @Param("list") List<UpdateSortDTO> list);
 
 }
 

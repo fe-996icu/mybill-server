@@ -91,12 +91,12 @@ public enum ResultCode {
     // 10700~10799：账单
 
     // 10800~10899：附件
+    ATTACHMENT_LIST_BIND_EMPTY_ERROR(10800,"绑定附件列表不能为空"),
+    ATTACHMENT_ONE_BILL_EXCEED_MAX_SIZE_ERROR(10801, "单个账单附件数量超出最大数量"),
 
     // 10900~10999：模版
+    ;
 
-    // 11000~11099：其他
-    // CREATE_CHILDREN_EMPTY_ERROR(11000,"创建的子节点不能为空");
-;
     @JsonValue
     private final Integer code;
     private final String message;
