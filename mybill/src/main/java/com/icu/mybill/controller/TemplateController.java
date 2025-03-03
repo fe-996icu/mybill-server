@@ -1,7 +1,6 @@
 package com.icu.mybill.controller;
 
 import cn.hutool.core.bean.BeanUtil;
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.icu.mybill.common.Result;
 import com.icu.mybill.dto.common.UpdateSortDTO;
 import com.icu.mybill.dto.template.CreateTemplateDTO;
@@ -9,7 +8,6 @@ import com.icu.mybill.dto.template.UpdateTemplateDTO;
 import com.icu.mybill.enums.ResultCode;
 import com.icu.mybill.pojo.Template;
 import com.icu.mybill.service.TemplateService;
-import com.icu.mybill.util.ThreadLocalHelper;
 import com.icu.mybill.vo.template.TemplateVO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -53,17 +51,19 @@ public class TemplateController {
     }
 
     /**
-     * 获取账单模版全部列表
+     * 获取账单模版列表
      *
      * @return
      */
     @GetMapping("list")
     @Operation(summary = "获取账单模版全部列表", description = "获取账单模版全部列表")
-    public Result<List<TemplateVO>> list() {
-        LambdaQueryWrapper<Template> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.eq(Template::getUserId, ThreadLocalHelper.get().getId());
+    public Result<List<TemplateVO>> list(
+            @Parameter(description = "账本id", required = true)
+            @RequestParam(value = "accountBookId", required = true)
+            Long accountBookId
+    ) {
+        List<Template> list = this.templateService.listByAccountBookId(accountBookId);
 
-        List<Template> list = this.templateService.list(queryWrapper);
         List<TemplateVO> memberTypeVOS = BeanUtil.copyToList(list, TemplateVO.class);
 
         return Result.ok(memberTypeVOS);

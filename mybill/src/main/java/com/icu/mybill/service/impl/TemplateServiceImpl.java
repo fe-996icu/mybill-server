@@ -197,4 +197,21 @@ public class TemplateServiceImpl extends ServiceImpl<TemplateMapper, Template>
 
         return this.removeById(id);
     }
+
+    @Override
+    public List<Template> listByAccountBookId(long accountBookId) {
+        Template template = this.templateMapper.selectById(accountBookId);
+
+        if (template == null) {
+            throw new FrontendErrorPromptException(ResultCode.ACCOUNT_BOOK_NOT_EXISTS);
+        }
+        if (!template.getUserId().equals(ThreadLocalHelper.get().getId())){
+            throw new FrontendErrorPromptException(ResultCode.ACCOUNT_BOOK_NOT_SELF_ERROR);
+        }
+
+        return this.lambdaQuery()
+                .eq(Template::getAccountBookId, accountBookId)
+                .eq(Template::getUserId, ThreadLocalHelper.get().getId())
+                .list();
+    }
 }

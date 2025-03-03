@@ -25,4 +25,6 @@ public interface TemplateService extends IService<Template> {
     boolean updateData(UpdateTemplateDTO updateTemplateDTO);
 
     boolean deleteById(long id);
+
+    List<Template> listByAccountBookId(long accountBookId);
 }
