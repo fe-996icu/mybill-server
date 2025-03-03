@@ -19,10 +19,6 @@ public class TemplateBaseDTO {
     @Schema(description = "账单模版名称", requiredMode = Schema.RequiredMode.REQUIRED)
     private String name;
 
-    @NotNull(message = "账单类型不能为空")
-    @Schema(description = "账单类型，1为支出，2为收入", requiredMode = Schema.RequiredMode.REQUIRED)
-    private BillType type;
-
     @NotNull(message = "账单分类id不能为空")
     @Schema(description = "账单分类id", requiredMode = Schema.RequiredMode.REQUIRED)
     private Long billCategoryId;

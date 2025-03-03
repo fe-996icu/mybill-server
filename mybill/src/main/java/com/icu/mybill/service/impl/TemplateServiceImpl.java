@@ -169,29 +169,96 @@ public class TemplateServiceImpl extends ServiceImpl<TemplateMapper, Template>
         Long userId = ThreadLocalHelper.get().getId();
 
         Template template = this.getById(updateTemplateDTO.getId());
-
         if(template == null){
             throw new FrontendErrorPromptException(ResultCode.NOT_QUERY_NEED_OPERATE_DATA_ERROR);
         }
-
         if (!template.getUserId().equals(userId)){
             throw new FrontendErrorPromptException(ResultCode.UPDATE_DATA_NOT_SELF_ERROR);
         }
 
-        BeanUtil.copyProperties(template, updateTemplateDTO);
 
-        return this.updateById(template);
+        // 校验账单分类是否在表中存在，并且需要是二级账单分类
+        BillCategory billCategory = this.billCategoryMapper.selectById(updateTemplateDTO.getBillCategoryId());
+        if (billCategory == null){
+            throw new FrontendErrorPromptException(ResultCode.BILL_CATEGORY_NOT_EXISTS);
+        }
+        if (billCategory.getParentId() == null){
+            throw new FrontendErrorPromptException(ResultCode.BILL_CATEGORY_REQUIRED_SUB_LEVEL);
+        }
+        if(!Objects.equals(billCategory.getUserId(), userId)){
+            throw new FrontendErrorPromptException(ResultCode.BILL_CATEGORY_NOT_SELF_ERROR);
+        }
+
+
+        // 校验账户类型是否在表中存在，并且需要时二级账单分类
+        AccountType accountType = this.accountTypeMapper.selectById(updateTemplateDTO.getAccountTypeId());
+        if (accountType == null){
+            throw new FrontendErrorPromptException(ResultCode.ACCOUNT_TYPE_NOT_EXISTS);
+        }
+        if (accountType.getParentId() == null){
+            throw new FrontendErrorPromptException(ResultCode.ACCOUNT_TYPE_REQUIRED_SUB_LEVEL);
+        }
+        if(!Objects.equals(accountType.getUserId(), userId)){
+            throw new FrontendErrorPromptException(ResultCode.ACCOUNT_TYPE_NOT_SELF_ERROR);
+        }
+
+        // 校验成员类型是否在表中存在
+        if (updateTemplateDTO.getMemberTypeId() != null) {
+            MemberType memberType = this.memberTypeMapper.selectById(updateTemplateDTO.getMemberTypeId());
+            if (memberType == null){
+                throw new FrontendErrorPromptException(ResultCode.MEMBER_TYPE_NOT_EXISTS);
+            }
+            if(!Objects.equals(memberType.getUserId(), userId)){
+                throw new FrontendErrorPromptException(ResultCode.MEMBER_TYPE_NOT_SELF_ERROR);
+            }
+        }
+
+
+        // 校验商家类型是否在表中存在
+        if (updateTemplateDTO.getShopTypeId() != null) {
+            ShopType shopType = this.shopTypeMapper.selectById(updateTemplateDTO.getShopTypeId());
+            if (shopType == null){
+                throw new FrontendErrorPromptException(ResultCode.SHOP_TYPE_NOT_EXISTS);
+            }
+            if(!Objects.equals(shopType.getUserId(), userId)){
+                throw new FrontendErrorPromptException(ResultCode.SHOP_TYPE_NOT_SELF_ERROR);
+            }
+        }
+
+
+        // 校验项目类型是否在表中存在
+        if (updateTemplateDTO.getProjectTypeId() != null) {
+            ProjectType projectType = this.projectTypeMapper.selectById(updateTemplateDTO.getProjectTypeId());
+            if (projectType == null){
+                throw new FrontendErrorPromptException(ResultCode.PROJECT_TYPE_NOT_EXISTS);
+            }
+            if(!Objects.equals(projectType.getUserId(), userId)){
+                throw new FrontendErrorPromptException(ResultCode.PROJECT_TYPE_NOT_SELF_ERROR);
+            }
+        }
+
+
+        // null值允许被更新，因为前端可以删除一些字段设置
+        return this.lambdaUpdate()
+                .eq(Template::getId, updateTemplateDTO.getId())
+                .set(Template::getName, updateTemplateDTO.getName())
+                .set(Template::getBillCategoryId, updateTemplateDTO.getBillCategoryId())
+                .set(Template::getAccountTypeId, updateTemplateDTO.getAccountTypeId())
+                .set(Template::getAmount, updateTemplateDTO.getAmount())
+                .set(Template::getMemberTypeId, updateTemplateDTO.getMemberTypeId())
+                .set(Template::getShopTypeId, updateTemplateDTO.getShopTypeId())
+                .set(Template::getProjectTypeId, updateTemplateDTO.getProjectTypeId())
+                .set(Template::getNotes, updateTemplateDTO.getNotes())
+                .update();
     }
 
     @Override
     public boolean deleteById(long id) {
-        Template accountType = this.getById(id);
-
-        if (accountType == null){
+        Template template = this.getById(id);
+        if (template == null){
             throw new FrontendErrorPromptException(ResultCode.NOT_QUERY_NEED_OPERATE_DATA_ERROR);
         }
-
-        if (!accountType.getUserId().equals(ThreadLocalHelper.get().getId())){
+        if (!template.getUserId().equals(ThreadLocalHelper.get().getId())){
             throw new FrontendErrorPromptException(ResultCode.DELETE_DATA_NOT_SELF_ERROR);
         }
 
@@ -201,7 +268,6 @@ public class TemplateServiceImpl extends ServiceImpl<TemplateMapper, Template>
     @Override
     public List<Template> listByAccountBookId(long accountBookId) {
         Template template = this.templateMapper.selectById(accountBookId);
-
         if (template == null) {
             throw new FrontendErrorPromptException(ResultCode.ACCOUNT_BOOK_NOT_EXISTS);
         }
