@@ -117,7 +117,7 @@ public class TemplateController {
             return Result.fail(ResultCode.UPDATE_SORT_LIST_EMPTY_ERROR);
         }
 
-        Boolean result = templateService.updateSort(list);
+        boolean result = templateService.updateSort(list);
 
         return Result.ok(result);
     }

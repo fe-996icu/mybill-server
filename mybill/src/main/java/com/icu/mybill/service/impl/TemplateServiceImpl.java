@@ -50,18 +50,18 @@ public class TemplateServiceImpl extends ServiceImpl<TemplateMapper, Template>
     public boolean updateSort(List<UpdateSortDTO> list) {
         Long userId = ThreadLocalHelper.get().getId();
 
-        List<Template> queryList = this.lambdaQuery()
+        List<Template> templateList = this.lambdaQuery()
                 // .eq(Template::getUserId, userId)
                 .in(Template::getId, list.stream().map(UpdateSortDTO::getId).toList())
                 .list();
 
         // 查询到的数据量与查询的id数量不一致，说明有id不存在，抛出异常
-        if (list.size() != queryList.size()){
+        if (list.size() != templateList.size()) {
             throw new FrontendErrorPromptException(ResultCode.NOT_QUERY_NEED_OPERATE_DATA_ERROR);
         }
 
         // 遍历查询到的数据，判断用户id是否与当前用户id一致，不一致抛出异常
-        queryList.forEach(item -> {
+        templateList.forEach(item -> {
             if (!item.getUserId().equals(userId)) {
                 throw new FrontendErrorPromptException(ResultCode.UPDATE_DATA_NOT_SELF_ERROR);
             }
