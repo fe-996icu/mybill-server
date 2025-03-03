@@ -6,7 +6,8 @@ import jakarta.validation.Payload;
 import java.lang.annotation.*;
 
 /**
- * 作用于DTO类上的验证注解，验证至少传递一个字段
+ * 作用于DTO类上的验证注解，验证至少传递一个字段<br>
+ * 会校验继承的字段
  * */
 @Documented
 @Constraint(validatedBy = AtLeastOneNotNullValidator.class)

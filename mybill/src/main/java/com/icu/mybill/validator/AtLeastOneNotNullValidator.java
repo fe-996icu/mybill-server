@@ -24,28 +24,33 @@ public class AtLeastOneNotNullValidator implements ConstraintValidator<AtLeastOn
             return false; // DTO 不能为 null
         }
 
-        Field[] fields = value.getClass().getDeclaredFields();
-        for (Field field : fields) {
-            field.setAccessible(true);
+        Class<?> clazz = value.getClass();
 
-            // 跳过排除的字段（如 id）
-            if (isExcluded(field.getName())) {
-                continue;
-            }
+        while (clazz != null && clazz != Object.class) { // 递归遍历当前类及所有父类
+            Field[] fields = clazz.getDeclaredFields();
+            for (Field field : fields) {
+                field.setAccessible(true);
 
-            try {
-                Object fieldValue = field.get(value);
-                if (fieldValue instanceof String) {
-                    if (StringUtils.isNotEmpty((String) fieldValue)) {
-                        return true; // 只要有一个非空字符串，校验通过
-                    }
-                } else if (fieldValue != null) {
-                    return true; // 只要有一个非 null 值，校验通过
+                // 跳过排除的字段（如 id）
+                if (isExcluded(field.getName())) {
+                    continue;
                 }
-            } catch (IllegalAccessException e) {
-                System.out.println("反射获取字段值时出错2222222222222222222222：" + e.getMessage());
-                e.printStackTrace();
+
+                try {
+                    Object fieldValue = field.get(value);
+                    if (fieldValue instanceof String) {
+                        if (StringUtils.isNotEmpty((String) fieldValue)) {
+                            return true; // 只要有一个非空字符串，校验通过
+                        }
+                    } else if (fieldValue != null) {
+                        return true; // 只要有一个非 null 值，校验通过
+                    }
+                } catch (IllegalAccessException e) {
+                    System.out.println("反射获取字段值时出错：" + e.getMessage());
+                    e.printStackTrace();
+                }
             }
+            clazz = clazz.getSuperclass(); // 获取父类，继续循环
         }
 
         return false; // 如果所有字段都为空，则校验失败
