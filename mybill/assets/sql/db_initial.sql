@@ -111,7 +111,7 @@ create table bill (
     account_book_id bigint not null comment '账本id（逻辑外键）',
     type tinyint not null default 1 comment '账单类型：1-支出, 2-收入',
     bill_category_id bigint not null comment '账单分类id（逻辑外键）',
-    account_type_id bigint not null comment '账户类型id（逻辑外键）',
+    account_type_id bigint null comment '账户类型id（逻辑外键）',
     amount decimal(10,2) not null comment '金额',
     member_type_id bigint not null comment '成员类型id（逻辑外键）',
     date datetime not null default now() comment '账单日期',
