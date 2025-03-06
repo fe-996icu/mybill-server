@@ -60,3 +60,5 @@ com:
         # token 密钥 ： “需要一个长度超过256个字符的字符串秘钥” =>6ZyA6KaB5LiA5Liq6ZW/5bqm6LaF6L+HMjU25Liq5a2X56ym55qE5a2X56ym5Liy56eY6ZKl
         secret: 6ZyA6KaB5LiA5Liq6ZW/5bqm6LaF6L+HMjU25Liq5a2X56ym55qE5a2X56ym5Liy56eY6ZKl
         expire-time: 259200 # token 过期时间，单位为分钟，259200=60*24*180
+      global-datetime-format-timestamp-enable: true # json转换日期格式使用时间戳，开启后，pattern不生效，false的时候pattern才生效
+      global-datetime-format-pattern: yyyy-MM-dd HH:mm:ss
