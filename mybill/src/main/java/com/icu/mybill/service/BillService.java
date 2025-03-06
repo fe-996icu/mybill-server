@@ -1,7 +1,8 @@
 package com.icu.mybill.service;
 
-import com.icu.mybill.pojo.Bill;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.icu.mybill.dto.bill.UpdateBillDTO;
+import com.icu.mybill.pojo.Bill;
 
 /**
 * @author zhangjianzhong
@@ -10,4 +11,9 @@ import com.baomidou.mybatisplus.extension.service.IService;
 */
 public interface BillService extends IService<Bill> {
 
+    boolean saveOne(Bill bill);
+
+    boolean updateData(UpdateBillDTO updateBillDTO);
+
+    boolean deleteById(long id);
 }
