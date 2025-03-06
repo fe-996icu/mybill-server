@@ -1,10 +1,13 @@
 package com.icu.mybill.controller;
 
 import cn.hutool.core.bean.BeanUtil;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.icu.mybill.common.Result;
+import com.icu.mybill.dto.PageDTO;
 import com.icu.mybill.dto.bill.CreateBillDTO;
 import com.icu.mybill.dto.bill.UpdateBillDTO;
 import com.icu.mybill.pojo.Bill;
+import com.icu.mybill.query.BillListQuery;
 import com.icu.mybill.service.BillService;
 import com.icu.mybill.vo.bill.BillVO;
 import io.swagger.v3.oas.annotations.Operation;
@@ -78,4 +81,23 @@ public class BillController {
 
         return Result.ok(result);
     }
+
+    /**
+     * 分页获取账单列表
+     *
+     * @param billListQuery
+     * @return
+     */
+    @GetMapping("page")
+    @Operation(summary = "分页获取账本列表", description = "分页获取账本列表")
+    public Result<PageDTO<BillVO>> page(
+            @Parameter(description = "分页查询参数")
+            @ModelAttribute() @Validated BillListQuery billListQuery
+    ) {
+        Page<Bill> page = billService.pageQuery(billListQuery);
+        PageDTO<BillVO> dto = PageDTO.of(page, BillVO.class);
+
+        return Result.ok(dto);
+    }
+
 }

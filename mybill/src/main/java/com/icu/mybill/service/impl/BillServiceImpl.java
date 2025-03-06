@@ -1,12 +1,13 @@
 package com.icu.mybill.service.impl;
 
-import cn.hutool.core.bean.BeanUtil;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.icu.mybill.dto.bill.UpdateBillDTO;
 import com.icu.mybill.enums.ResultCode;
 import com.icu.mybill.exception.common.FrontendErrorPromptException;
 import com.icu.mybill.mapper.*;
 import com.icu.mybill.pojo.*;
+import com.icu.mybill.query.BillListQuery;
 import com.icu.mybill.service.BillService;
 import com.icu.mybill.util.ThreadLocalHelper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -237,6 +238,21 @@ public class BillServiceImpl extends ServiceImpl<BillMapper, Bill>
         }
 
         return this.removeById(id);
+    }
+
+    @Override
+    public Page<Bill> pageQuery(BillListQuery query) {
+        // 组合分页查询条件
+        Page<Bill> page = query.toPage();
+
+        // 查询
+        this.lambdaQuery()
+                .eq(Bill::getUserId, ThreadLocalHelper.get().getId())
+                .eq(Bill::getAccountBookId, query.getAccountBookId())
+                .orderByDesc(Bill::getDate)
+                .page(page);
+
+        return page;
     }
 }
 
