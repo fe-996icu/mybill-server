@@ -76,37 +76,27 @@ public class TemplateServiceImpl extends ServiceImpl<TemplateMapper, Template>
         template.setUserId(userId);
 
         // 校验账单分类是否在表中存在，并且需要是二级账单分类
-        if (template.getBillCategoryId() != null){
-            BillCategory billCategory = this.billCategoryMapper.selectById(template.getBillCategoryId());
-
-            if (billCategory == null){
-                throw new FrontendErrorPromptException(ResultCode.BILL_CATEGORY_NOT_EXISTS);
-            }
-
-            if (billCategory.getParentId() == null){
-                throw new FrontendErrorPromptException(ResultCode.BILL_CATEGORY_REQUIRED_SUB_LEVEL);
-            }
-
-            if(!Objects.equals(billCategory.getUserId(), userId)){
-                throw new FrontendErrorPromptException(ResultCode.BILL_CATEGORY_NOT_SELF_ERROR);
-            }
+        BillCategory billCategory = this.billCategoryMapper.selectById(template.getBillCategoryId());
+        if (billCategory == null){
+            throw new FrontendErrorPromptException(ResultCode.BILL_CATEGORY_NOT_EXISTS);
+        }
+        if (billCategory.getParentId() == null){
+            throw new FrontendErrorPromptException(ResultCode.BILL_CATEGORY_REQUIRED_SUB_LEVEL);
+        }
+        if(!Objects.equals(billCategory.getUserId(), userId)){
+            throw new FrontendErrorPromptException(ResultCode.BILL_CATEGORY_NOT_SELF_ERROR);
         }
 
         // 校验账户类型是否在表中存在，并且需要时二级账单分类
-        if (template.getAccountTypeId() != null){
-            AccountType accountType = this.accountTypeMapper.selectById(template.getAccountTypeId());
-
-            if (accountType == null){
-                throw new FrontendErrorPromptException(ResultCode.ACCOUNT_TYPE_NOT_EXISTS);
-            }
-
-            if (accountType.getParentId() == null){
-                throw new FrontendErrorPromptException(ResultCode.ACCOUNT_TYPE_REQUIRED_SUB_LEVEL);
-            }
-
-            if(!Objects.equals(accountType.getUserId(), userId)){
-                throw new FrontendErrorPromptException(ResultCode.ACCOUNT_TYPE_NOT_SELF_ERROR);
-            }
+        AccountType accountType = this.accountTypeMapper.selectById(template.getAccountTypeId());
+        if (accountType == null){
+            throw new FrontendErrorPromptException(ResultCode.ACCOUNT_TYPE_NOT_EXISTS);
+        }
+        if (accountType.getParentId() == null){
+            throw new FrontendErrorPromptException(ResultCode.ACCOUNT_TYPE_REQUIRED_SUB_LEVEL);
+        }
+        if(!Objects.equals(accountType.getUserId(), userId)){
+            throw new FrontendErrorPromptException(ResultCode.ACCOUNT_TYPE_NOT_SELF_ERROR);
         }
 
         // 校验成员类型是否在表中存在
