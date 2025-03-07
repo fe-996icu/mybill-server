@@ -11,6 +11,7 @@ import java.util.Arrays;
 @Getter
 public enum ResultCode {
     SUCCESS(200,"ok"),
+
     PARAMETER_FAIL(400,"请求参数错误"),
     NOT_PERMISSION(401,"无权限访问"),
     NOT_AUTHORIZED(403,"访问受限"),
@@ -40,6 +41,10 @@ public enum ResultCode {
 
     UPDATE_REQUIRE_ONE_FIELD_ERROR(5120,"至少更新一个字段"),
     UPDATE_SORT_LIST_EMPTY_ERROR(5121,"排序列表为空"),
+    QUERY_DATE_RANGE_EMPTY_ERROR(5122,"日期范围不能为空"),
+    QUERY_DATE_EMPTY_ERROR(5123,"日期不能为空"),
+    QUERY_START_DATE_GREATER_THAN_END_DATE_ERROR(5124,"开始时间不能大于结束时间"),
+    // ENUM_CONVERT_ERROR(5125, "枚举类型转换错误"),
 
 
 
