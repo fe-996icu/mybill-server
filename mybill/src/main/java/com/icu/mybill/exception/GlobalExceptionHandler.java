@@ -24,6 +24,8 @@ import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Slf4j
 // @RestControllerAdvice 表示全局异常处理器，拦截所有 @Controller 抛出的异常
@@ -111,9 +113,48 @@ public class GlobalExceptionHandler {
         // 取出第一个错误信息
         ObjectError objectError = e.getBindingResult().getAllErrors().stream().findFirst()
                 .orElseThrow(() -> new IllegalArgumentException("无效的值2222222222222: ", e));
+
         String errorMessage = objectError.getDefaultMessage();
+
+        // 如果错误信息是下面这种内容开始的，则是枚举类型转换失败，匹配关键词，取出参数名和参数值返回给前端
+        // 枚举类型转换器转换失败抛出的 IllegalArgumentException 异常，会被 spring 吞掉并一步步转换成 MethodArgumentNotValidException 类型异常
+        if(errorMessage.contains("Failed to convert property value of type")){
+            String[] matched = this.matchEnumConvertErrorMessage(errorMessage);
+            if(matched != null){
+                return Result.fail(ResultCode.PARAMETER_FAIL.getCode(), String.format("参数 %s 类型错误，无法识别 '%s'", matched[0], matched[1]));
+            }
+        }
+
         log.warn("[MethodArgumentNotValidException]", e);
         return Result.build(null, ResultCode.PARAMETER_FAIL.getCode(), errorMessage);
+    }
+
+    /**
+     * 枚举类型转换失败，匹配关键词，取出参数名和参数值返回给前端
+     * @param str
+     * @return
+     */
+    private String[] matchEnumConvertErrorMessage(String str){
+        String[] result = new String[2];
+        // str = "Failed to convert property value of type 'java.lang.String' to required type 'com.icu.mybill.enums.BillType' for property 'type'; Failed to convert from type [java.lang.String] to type [com.icu.mybill.enums.BillType] for value [3]]";
+
+        // 正则表达式
+        // /for property '(.+)'.+for value \[(.+)\].+/
+        String regex = "for property '([^']+)'.+for value \\[([^\\]]+)\\]";
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(str);
+
+        if (matcher.find()) {
+            String propertyName = matcher.group(1);
+            String propertyValue = matcher.group(2);
+
+            result[0] = propertyName;
+            result[1] = propertyValue;
+        } else {
+            return null;
+        }
+
+        return result;
     }
 
     /**
