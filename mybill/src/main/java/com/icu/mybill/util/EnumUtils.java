@@ -22,15 +22,11 @@ public class EnumUtils {
             return null;
         }
 
-        try {
-            int intValue = Integer.parseInt(value.toString());
-            return Arrays.stream(enumClass.getEnumConstants())
-                    .filter(type -> type.getValue().equals(intValue))
-                    .findFirst()
-                    .orElseThrow(() -> new IllegalArgumentException("无效的值: " + intValue));
-        } catch (NumberFormatException e) {
-            throw new IllegalArgumentException("无效的格式: " + value, e);
-        }
+        int intValue = Integer.parseInt(value.toString());
+        return Arrays.stream(enumClass.getEnumConstants())
+                .filter(type -> type.getValue().equals(intValue))
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("无效的值: " + intValue));
     }
     
     /**
