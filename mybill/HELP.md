@@ -7,6 +7,42 @@
 > Java JDK Version 17
 >
 
+## Controller 接收枚举类型参数，需要做数据转换说明
+`com.icu.mybill.util.EnumUtils.ValuedEnum`
+1. 创建枚举类：`com.icu.mybill.enums.BillQueryDateRange.java`，需要实现`com.icu.mybill.util.EnumUtils.ValuedEnum`接口。
+    ```java
+    @Getter
+    @AllArgsConstructor
+    public enum BillQueryDateRange implements EnumUtils.ValuedEnum {
+        DEFAULT(1, "所有"),
+        WEEK(2, "周"),
+        MONTH(3, "月"),
+        YEAR(4, "年");
+    
+        @JsonValue // 告诉jackson，序列化时，返回给前端的value，因为springboot用的是jackson
+        @EnumValue // 告诉MybatisPlus，数据库存的是value
+        private final Integer value;
+        private final String desc;
+    }
+    ```
+2. 创建枚举类型转换器类：`com.icu.mybill.converter.StringToBillQueryDateRangeConverter.java`
+    ```java
+    @Component
+    public class StringToBillQueryDateRangeConverter implements Converter<String, BillQueryDateRange> {
+        @Override
+        public BillQueryDateRange convert(@NotNull String source) {
+            return EnumUtils.fromValue(source, BillQueryDateRange.class);
+        }
+    }
+    ```
+3. 在`com.icu.mybill.config.WebConfig.java`类中注入依赖。
+    ```java
+    // 注册字符串转枚举类型转换器
+    @Autowired
+    private StringToBillQueryDateRangeConverter stringToBillQueryDateRangeConverter;
+    ```
+
+
 ## DateTimeFormatter.ofPattern 支持的格式模式
 
 `DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")` 是 Java 中用于格式化 `LocalDateTime` 或 `ZonedDateTime` 的一种模式。`ofPattern` 方法支持 丰富的格式化模式：
