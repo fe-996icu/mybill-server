@@ -1,5 +1,6 @@
 package com.icu.mybill.config;
 
+import com.icu.mybill.converter.StringToBillQueryDateRangeConverter;
 import com.icu.mybill.converter.StringToBillTypeConverter;
 import com.icu.mybill.interceptors.TokenInterceptor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,10 @@ public class WebConfig implements WebMvcConfigurer {
     // 注册字符串转枚举类型转换器
     @Autowired
     private StringToBillTypeConverter stringToBillTypeConverter;
+
+    // 注册字符串转枚举类型转换器
+    @Autowired
+    private StringToBillQueryDateRangeConverter stringToBillQueryDateRangeConverter;
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
