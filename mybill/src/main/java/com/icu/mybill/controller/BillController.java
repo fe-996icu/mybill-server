@@ -6,6 +6,8 @@ import com.icu.mybill.common.Result;
 import com.icu.mybill.dto.PageDTO;
 import com.icu.mybill.dto.bill.CreateBillDTO;
 import com.icu.mybill.dto.bill.UpdateBillDTO;
+import com.icu.mybill.enums.BillQueryDateRange;
+import com.icu.mybill.enums.ResultCode;
 import com.icu.mybill.pojo.Bill;
 import com.icu.mybill.query.BillListQuery;
 import com.icu.mybill.service.BillService;
@@ -85,16 +87,31 @@ public class BillController {
     /**
      * 分页获取账单列表
      *
-     * @param billListQuery
+     * @param query
      * @return
      */
     @GetMapping("page")
     @Operation(summary = "分页获取账本列表", description = "分页获取账本列表")
     public Result<PageDTO<BillVO>> page(
             @Parameter(description = "分页查询参数")
-            @ModelAttribute() @Validated BillListQuery billListQuery
+            @ModelAttribute() @Validated BillListQuery query
     ) {
-        Page<Bill> page = billService.pageQuery(billListQuery);
+        // 校验日期范围，不是 默认查询时，日期范围不能为空
+        if (query.getDateRange() != BillQueryDateRange.DEFAULT){
+            if (query.getStartDate() == null || query.getEndDate() == null){
+                return Result.fail(ResultCode.QUERY_DATE_RANGE_EMPTY_ERROR);
+            }
+
+            // 开始日期不能大于结束日期
+            if (query.getStartDate().isAfter(query.getEndDate())){
+                return Result.fail(ResultCode.QUERY_START_DATE_GREATER_THAN_END_DATE_ERROR);
+            }
+        }else{
+            query.setStartDate(null);
+            query.setEndDate(null);
+        }
+
+        Page<Bill> page = billService.pageQuery(query);
         PageDTO<BillVO> dto = PageDTO.of(page, BillVO.class);
 
         return Result.ok(dto);

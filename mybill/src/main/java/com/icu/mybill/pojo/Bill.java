@@ -1,16 +1,14 @@
 package com.icu.mybill.pojo;
 
 import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import java.math.BigDecimal;
-import java.time.LocalDateTime;
-import java.util.Date;
-
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.icu.mybill.enums.BillType;
 import lombok.Data;
+import lombok.experimental.FieldNameConstants;
+
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 /**
  * 账单表
@@ -18,6 +16,7 @@ import lombok.Data;
  */
 @TableName(value ="bill")
 @Data
+@FieldNameConstants
 public class Bill {
     /**
      * 账单id

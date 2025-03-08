@@ -1,8 +1,10 @@
 package com.icu.mybill.service.impl;
 
+import com.baomidou.mybatisplus.core.metadata.OrderItem;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.icu.mybill.dto.bill.UpdateBillDTO;
+import com.icu.mybill.enums.BillQueryDateRange;
 import com.icu.mybill.enums.ResultCode;
 import com.icu.mybill.exception.common.FrontendErrorPromptException;
 import com.icu.mybill.mapper.*;
@@ -242,14 +244,20 @@ public class BillServiceImpl extends ServiceImpl<BillMapper, Bill>
 
     @Override
     public Page<Bill> pageQuery(BillListQuery query) {
-        // 组合分页查询条件
-        Page<Bill> page = query.toPage();
+        // 组合分页查询条件，并按照日期和id倒序排序
+        Page<Bill> page = query.toPage(
+                OrderItem.desc(Bill.Fields.date),
+                OrderItem.desc(Bill.Fields.id)
+        );
 
         // 查询
         this.lambdaQuery()
-                .eq(Bill::getUserId, ThreadLocalHelper.get().getId())
-                .eq(Bill::getAccountBookId, query.getAccountBookId())
-                .orderByDesc(Bill::getDate)
+                .eq(Bill::getUserId, ThreadLocalHelper.get().getId())   // 查询自己的账单
+                .eq(Bill::getAccountBookId, query.getAccountBookId())   // 查询指定账本账单
+                .eq(query.getType() != null, Bill::getType, query.getType())     // 查询指定账单类型
+                .between(query.getDateRange() != BillQueryDateRange.DEFAULT, Bill::getDate, query.getStartDate(), query.getEndDate())
+                // .eq(query.getQueryRangeType() != null, Bill::getType, query.getQueryRangeType())
+                // .orderByDesc(Bill::getDate)
                 .page(page);
 
         return page;
