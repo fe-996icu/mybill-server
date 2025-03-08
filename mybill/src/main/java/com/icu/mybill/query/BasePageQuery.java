@@ -3,6 +3,7 @@ package com.icu.mybill.query;
 import com.baomidou.mybatisplus.core.metadata.OrderItem;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 
@@ -16,49 +17,56 @@ public class BasePageQuery {
     private Integer pageNum = 1;
     @Schema(description = "每页数量", defaultValue = "100")
     private Integer pageSize = 100;
-    @Schema(description = "排序字段", defaultValue = "id")
-    private String orderBy = "id";
+    @Schema(description = "排序字段")
+    private String orderBy;
     @Schema(description = "排序方式", defaultValue = "true")
     private Boolean isAsc = true;
 
     /**
-     * 默认按照id升序排序，自动装配 page、size、orderBy、isAsc
+     * 创建分页对象，自动装配 page、size
+     * @param <T>
+     * @return
+     */
+    private <T> Page<T> createPage(){
+        // 组合分页查询条件
+        return new Page<>(pageNum, pageSize);
+    }
+
+    /**
+     * 创建分页对象，自动装配 pageNum、 pageSize、 orderBy 和 isAsc
      * @return
      * @param <T>
      */
     public <T> Page<T> toPage(){
-        return toPage(OrderItem.asc("id"));
+        // 组合分页查询条件
+        Page<T> page = this.createPage();
+        if(this.orderBy != null){
+            page.addOrder(new OrderItem().setColumn(orderBy).setAsc(isAsc));
+        }
+        return page;
     }
 
     /**
-     * 自定义默认排序规则集合
+     * 创建分页对象，自定义排序规则，单个或多个
      * @param orders
      * @param <T>
      * @return
      */
-    public <T> Page<T> toPage(OrderItem ... orders){
-        // 组合分页查询条件
-        Page<T> page = new Page<>(pageNum, pageSize);
-
+    public <T> Page<T> toPage(@NotNull OrderItem ... orders){
+        Page<T> page = this.createPage();
         // 设置排序条件
-        if(orderBy != null){
-            page.addOrder(new OrderItem().setColumn(orderBy).setAsc(isAsc));
-        }else{
-            page.addOrder(orders);
-        }
-
+        page.addOrder(orders);
         return page;
     }
 
-
     /**
-     * 自定义排序规则
-     * @param defaultOrderBy
+     * 创建分页对象，自定义排序规则，单个排序字段
+     * @param orderBy
      * @param isAsc
      * @param <T>
      * @return
      */
-    public <T> Page<T> toPage(String defaultOrderBy, Boolean isAsc){
-        return toPage(new OrderItem().setColumn(defaultOrderBy).setAsc(isAsc));
+    public <T> Page<T> toPage(String orderBy, boolean isAsc){
+        return this.toPage(new OrderItem().setColumn(orderBy).setAsc(isAsc));
     }
 }
