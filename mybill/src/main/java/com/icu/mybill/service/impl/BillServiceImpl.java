@@ -1,5 +1,6 @@
 package com.icu.mybill.service.impl;
 
+import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.metadata.OrderItem;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -250,14 +251,17 @@ public class BillServiceImpl extends ServiceImpl<BillMapper, Bill>
                 OrderItem.desc(Bill.Fields.id)
         );
 
+
+
         // 查询
         this.lambdaQuery()
                 .eq(Bill::getUserId, ThreadLocalHelper.get().getId())   // 查询自己的账单
                 .eq(Bill::getAccountBookId, query.getAccountBookId())   // 查询指定账本账单
                 .eq(query.getType() != null, Bill::getType, query.getType())     // 查询指定账单类型
-                .between(query.getDateRange() != BillQueryDateRange.DEFAULT, Bill::getDate, query.getStartDate(), query.getEndDate())
-                // .eq(query.getQueryRangeType() != null, Bill::getType, query.getQueryRangeType())
-                // .orderByDesc(Bill::getDate)
+                .between(query.getDateRange() != BillQueryDateRange.DEFAULT, Bill::getDate, query.getStartDate(), query.getEndDate())   // 查询指定日期范围
+                .like(StrUtil.isNotBlank(query.getKeyword()), Bill::getNotes, query.getKeyword())   // 查询指定关键字
+                .ge(query.getFromAmount() != null, Bill::getAmount, query.getFromAmount())  // 查询大于等于起始金额
+                .le(query.getToAmount() != null, Bill::getAmount, query.getToAmount())  // 查询小于等于结束金额
                 .page(page);
 
         return page;

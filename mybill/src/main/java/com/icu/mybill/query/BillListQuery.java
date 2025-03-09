@@ -7,6 +7,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @EqualsAndHashCode(callSuper = true) // 继承父类的equals和hashCode方法
@@ -28,4 +29,13 @@ public class BillListQuery extends BasePageQuery {
 
     @Schema(description = "账单类型")
     private BillType type;
+
+    @Schema(description = "关键词")
+    private String keyword;
+
+    @Schema(description = "金额范围-最小金额开始")
+    private BigDecimal fromAmount;
+
+    @Schema(description = "金额范围-最大金额结束")
+    private BigDecimal toAmount;
 }
