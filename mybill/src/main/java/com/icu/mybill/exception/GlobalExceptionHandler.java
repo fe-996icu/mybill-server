@@ -108,6 +108,7 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public Result<?> handleValidationException(MethodArgumentNotValidException e) {
+        log.warn("[MethodArgumentNotValidException]", e);
         // String errorMessage = e.getBindingResult().getFieldError().getDefaultMessage();
 
         // 取出第一个错误信息
@@ -125,7 +126,6 @@ public class GlobalExceptionHandler {
             }
         }
 
-        log.warn("[MethodArgumentNotValidException]", e);
         return Result.build(null, ResultCode.PARAMETER_FAIL.getCode(), errorMessage);
     }
 
